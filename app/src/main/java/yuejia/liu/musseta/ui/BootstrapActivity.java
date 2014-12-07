@@ -3,6 +3,7 @@ package yuejia.liu.musseta.ui;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import timber.log.Timber;
 import yuejia.liu.musseta.R;
 
 /**
@@ -18,5 +19,7 @@ public class BootstrapActivity extends ActionBarActivity {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     toolbar.inflateMenu(R.menu.main);
     toolbar.setTitle(getTitle());
+
+    Timber.d("bootstrapped...");
   }
 }

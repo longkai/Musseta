@@ -1,9 +1,11 @@
+lib/
 .gradle/
 .idea/
 build/
 gradle/
 
 local.properties
+crashlytics.properties
 
 *.iml
 .DS_Store

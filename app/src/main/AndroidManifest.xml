@@ -2,6 +2,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="yuejia.liu.musseta">
 
+  <uses-permission android:name="android.permission.INTERNET"/>
+
   <application
       android:name=".Musseta"
       android:allowBackup="true"
@@ -14,5 +16,6 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
+    <meta-data android:name="com.crashlytics.ApiKey" android:value="ba2cdccffa22a0324bebda13dde369e2c61847af"/>
   </application>
 </manifest>
