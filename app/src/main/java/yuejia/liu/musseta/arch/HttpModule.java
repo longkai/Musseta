@@ -22,6 +22,7 @@ import javax.inject.Singleton;
  * @author longkai
  */
 @Module(
+    includes = ApiModule.class,
     complete = false,
     library = true
 )
