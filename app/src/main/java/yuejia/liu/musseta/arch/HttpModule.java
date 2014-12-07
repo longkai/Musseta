@@ -10,6 +10,7 @@ import com.squareup.picasso.Picasso;
 import dagger.Module;
 import dagger.Provides;
 import timber.log.Timber;
+import yuejia.liu.musseta.api.hn.HackerNewsApiModule;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +23,7 @@ import javax.inject.Singleton;
  * @author longkai
  */
 @Module(
-    includes = ApiModule.class,
+    includes = HackerNewsApiModule.class,
     complete = false,
     library = true
 )
