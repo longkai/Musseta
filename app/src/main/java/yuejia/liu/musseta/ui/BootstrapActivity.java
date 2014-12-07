@@ -1,0 +1,22 @@
+package yuejia.liu.musseta.ui;
+
+import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import yuejia.liu.musseta.R;
+
+/**
+ * Bootstrap ui.
+ *
+ * @author longkai
+ */
+public class BootstrapActivity extends ActionBarActivity {
+  @Override protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.musseta_toolbar);
+
+    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    toolbar.inflateMenu(R.menu.main);
+    toolbar.setTitle(getTitle());
+  }
+}

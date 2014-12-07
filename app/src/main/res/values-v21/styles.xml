@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Musseta" parent="AppTheme.NavBar">
+    </style>
+
+    <style name="AppTheme.NavBar">
+        <item name="android:navigationBarColor">@color/material_grey_700</item>
+    </style>
+</resources>
