@@ -3,8 +3,8 @@ package yuejia.liu.musseta.ui;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import timber.log.Timber;
-import yuejia.liu.musseta.R;
 import yuejia.liu.musseta.MussetaActivity;
+import yuejia.liu.musseta.R;
 
 /**
  * Bootstrap ui.
