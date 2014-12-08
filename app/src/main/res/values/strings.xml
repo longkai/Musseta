@@ -3,4 +3,6 @@
 <resources>
   <string name="app_name">Musseta</string>
   <string name="settings">Settings</string>
+  <string name="share">Share</string>
+  <string name="mime_text_plain">text/plain</string>
 </resources>

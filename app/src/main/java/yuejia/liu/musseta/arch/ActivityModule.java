@@ -5,6 +5,7 @@ import yuejia.liu.musseta.MussetaActivity;
 import yuejia.liu.musseta.MussetaFragment;
 import yuejia.liu.musseta.MussetaListFragment;
 import yuejia.liu.musseta.ui.BootstrapActivity;
+import yuejia.liu.musseta.ui.HackerNewsFragment;
 
 /**
  * Musseta activity module.
@@ -16,7 +17,8 @@ import yuejia.liu.musseta.ui.BootstrapActivity;
         MussetaActivity.class,
         MussetaFragment.class,
         MussetaListFragment.class,
-        BootstrapActivity.class
+        BootstrapActivity.class,
+        HackerNewsFragment.class,
     },
     addsTo = AndroidModule.class,
     library = true
