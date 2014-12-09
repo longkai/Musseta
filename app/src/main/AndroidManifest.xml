@@ -19,6 +19,10 @@
       </intent-filter>
     </activity>
 
+    <meta-data
+        android:name="channel"
+        android:value="${channel}" />
+
     <meta-data android:name="com.crashlytics.ApiKey" android:value="ba2cdccffa22a0324bebda13dde369e2c61847af"/>
   </application>
 </manifest>
