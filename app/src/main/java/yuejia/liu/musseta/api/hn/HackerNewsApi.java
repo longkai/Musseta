@@ -13,11 +13,11 @@ import yuejia.liu.musseta.model.hn.User;
  * @author longkai
  */
 public interface HackerNewsApi {
-  @GET("/item/{id}.json") Observable<Item> item(@Path("id") long id);
+  @GET("/topstories.json") long[] topStories();
+
+  @GET("/item/{id}.json") Item item(@Path("id") long id);
 
   @GET("/user/{id}.json") Observable<User> user(@Path("id") String id);
-
-  @GET("/topstories.json") Observable<long[]> topStories();
 
   @GET("/maxitem.json") Observable<Long> maxItem();
 

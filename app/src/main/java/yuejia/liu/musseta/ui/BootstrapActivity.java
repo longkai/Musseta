@@ -2,7 +2,6 @@ package yuejia.liu.musseta.ui;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import timber.log.Timber;
 import yuejia.liu.musseta.MussetaActivity;
 import yuejia.liu.musseta.R;
@@ -21,7 +20,7 @@ public class BootstrapActivity extends MussetaActivity {
 
     if (savedInstanceState == null) {
       getSupportFragmentManager().beginTransaction()
-          .replace(R.id.fragment_container, new HackerNewsFragment())
+          .replace(R.id.fragment_container, new HackerNewsGridFragment())
           .commit();
     }
 
@@ -30,13 +29,6 @@ public class BootstrapActivity extends MussetaActivity {
 
   private void setupToolbar() {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    toolbar.setTitle(getTitle());
-    toolbar.inflateMenu(R.menu.main);
-    toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-      @Override public boolean onMenuItemClick(MenuItem menuItem) {
-        // TODO:
-        return false;
-      }
-    });
+    setSupportActionBar(toolbar);
   }
 }

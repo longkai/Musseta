@@ -1,6 +1,7 @@
 package yuejia.liu.musseta;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,8 @@ public class MussetaRecyclerFragment extends Fragment {
   private ProgressBar        progressBar;
   private RecyclerView       recyclerView;
   private SwipeRefreshLayout swipeRefreshLayout;
+
+  private boolean recyclerShown;
 
   @Override public View onCreateView(
       LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,12 +67,19 @@ public class MussetaRecyclerFragment extends Fragment {
     return rootView;
   }
 
+  @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    // TODO: compat with API level < 14
+    swipeRefreshLayout.setEnabled(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH);
+  }
+
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     ((MussetaActivity) getActivity()).inject(this);
   }
 
   @Override public void onDestroyView() {
+    recyclerShown = false;
     recyclerView = null;
     progressBar = null;
     rootView = null;
@@ -89,6 +99,10 @@ public class MussetaRecyclerFragment extends Fragment {
   }
 
   public void setRecyclerShown(boolean shown, boolean animate) {
+    if (recyclerShown == shown) {
+      return;
+    }
+    recyclerShown = shown;
     if (shown) {
       if (animate) {
         progressBar.startAnimation(AnimationUtils.loadAnimation(

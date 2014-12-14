@@ -4,8 +4,9 @@ import dagger.Module;
 import yuejia.liu.musseta.MussetaActivity;
 import yuejia.liu.musseta.MussetaFragment;
 import yuejia.liu.musseta.MussetaListFragment;
+import yuejia.liu.musseta.MussetaRecyclerFragment;
 import yuejia.liu.musseta.ui.BootstrapActivity;
-import yuejia.liu.musseta.ui.HackerNewsFragment;
+import yuejia.liu.musseta.ui.HackerNewsGridFragment;
 
 /**
  * Musseta activity module.
@@ -17,8 +18,9 @@ import yuejia.liu.musseta.ui.HackerNewsFragment;
         MussetaActivity.class,
         MussetaFragment.class,
         MussetaListFragment.class,
+        MussetaRecyclerFragment.class,
         BootstrapActivity.class,
-        HackerNewsFragment.class,
+        HackerNewsGridFragment.class,
     },
     addsTo = AndroidModule.class,
     library = true
