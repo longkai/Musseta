@@ -1,3 +1,1 @@
-include ':app', ':palette'
-
-project(':palette').projectDir = new File(settingsDir, '../material/palette')
+include ':app'
