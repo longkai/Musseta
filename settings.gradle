@@ -1,1 +1,1 @@
-include ':app', ':palette'
+include ':app'

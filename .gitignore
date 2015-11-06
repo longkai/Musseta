@@ -2,11 +2,11 @@ lib/
 .gradle/
 .idea/
 build/
-gradle/
 
 local.properties
 crashlytics.properties
 crashlytics-build.properties
+.gradletasknamecache
 
 *.iml
 .DS_Store
