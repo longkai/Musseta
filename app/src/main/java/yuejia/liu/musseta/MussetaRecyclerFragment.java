@@ -75,7 +75,6 @@ public class MussetaRecyclerFragment extends Fragment {
 
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    ((MussetaActivity) getActivity()).inject(this);
   }
 
   @Override public void onDestroyView() {

@@ -4,10 +4,8 @@ import android.app.Application;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import dagger.ObjectGraph;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
-import yuejia.liu.musseta.arch.AndroidModule;
 
 /**
  * Musseta app.
@@ -15,8 +13,6 @@ import yuejia.liu.musseta.arch.AndroidModule;
  * @author longkai
  */
 public class Musseta extends Application {
-  private ObjectGraph applicationGraph;
-
   @Override public void onCreate() {
     super.onCreate();
     if (BuildConfig.DEBUG) {
@@ -34,10 +30,5 @@ public class Musseta extends Application {
       Fabric.with(this, new Crashlytics());
     }
 
-    applicationGraph = ObjectGraph.create(new AndroidModule(this));
-  }
-
-  public ObjectGraph getApplicationGraph() {
-    return applicationGraph;
   }
 }

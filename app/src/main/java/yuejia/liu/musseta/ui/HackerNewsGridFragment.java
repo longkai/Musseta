@@ -31,6 +31,7 @@ import yuejia.liu.musseta.MussetaActivity;
 import yuejia.liu.musseta.MussetaRecyclerFragment;
 import yuejia.liu.musseta.R;
 import yuejia.liu.musseta.api.hn.HackerNewsApi;
+import yuejia.liu.musseta.api.hn.HackerNewsApiModule;
 import yuejia.liu.musseta.model.hn.Item;
 
 import java.lang.reflect.Field;
@@ -51,7 +52,7 @@ public class HackerNewsGridFragment extends MussetaRecyclerFragment implements S
 
   private static final String KEY_SINGLE_COLUMN = "single_column";
 
-  @Inject HackerNewsApi hackerNewsApi;
+  HackerNewsApi hackerNewsApi;
 
   private Subscription listRequest    = Subscriptions.empty();
   private Subscription colorProcessor = Subscriptions.empty();
@@ -70,6 +71,8 @@ public class HackerNewsGridFragment extends MussetaRecyclerFragment implements S
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setHasOptionsMenu(true);
+    HackerNewsApiModule module = new HackerNewsApiModule();
+    hackerNewsApi = module.provideHackerNewsApi();
   }
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

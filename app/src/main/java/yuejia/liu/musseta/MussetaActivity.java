@@ -2,23 +2,17 @@ package yuejia.liu.musseta;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import dagger.ObjectGraph;
-import yuejia.liu.musseta.arch.ActivityModule;
 
 /**
  * Musseta base activity.
  *
  * @author longkai
  */
-public class MussetaActivity extends ActionBarActivity {
-  private ObjectGraph activityGraph;
-
+public class MussetaActivity extends AppCompatActivity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    activityGraph = ((Musseta) getApplication()).getApplicationGraph().plus(new ActivityModule(this));
-    activityGraph.inject(this);
   }
 
   public void setToolbarColor(int color) {
@@ -32,12 +26,7 @@ public class MussetaActivity extends ActionBarActivity {
     }
   }
 
-  public void inject(Object object) {
-    activityGraph.inject(object);
-  }
-
   @Override protected void onDestroy() {
-    activityGraph = null;
     super.onDestroy();
   }
 }

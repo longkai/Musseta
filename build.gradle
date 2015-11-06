@@ -17,6 +17,7 @@ ext {
       // plugins
       android       : '1.3.1',
       fabric        : '1.+',
+      apt           : '1.8',
       // build config
       compileSdk    : 23,
       targetSdk     : 23,
@@ -30,7 +31,8 @@ ext {
       picasso       : '2.5.2',
       retrofit      : '1.9.0',
       okhttp        : '2.5.0',
-      dagger        : '1.2.2',
+      dagger        : '2.0.2',
+      javax         : '10.0-b28',
       crashlytics   : '2.5.2',
   ]
 
@@ -38,6 +40,7 @@ ext {
       // plugins
       android       : "com.android.tools.build:gradle:$versions.android",
       fabric        : "io.fabric.tools:gradle:$versions.fabric",
+      apt           : "com.neenbedankt.gradle.plugins:android-apt:$versions.apt",
       // dependencies
       palette       : "material:palette:$versions.palette",
       v4            : "com.android.support:cardview-v7:$versions.supportLibrary",
@@ -50,14 +53,16 @@ ext {
       picasso       : "com.squareup.picasso:picasso:$versions.picasso",
       retrofit      : "com.squareup.retrofit:retrofit:$versions.retrofit",
       okhttp        : "com.squareup.okhttp:okhttp:$versions.okhttp",
-      dagger        : "com.squareup.dagger:dagger:$versions.dagger",
-      daggerCompiler: "com.squareup.dagger:dagger-compiler:$versions.dagger",
+      dagger        : "com.google.dagger:dagger:$versions.dagger",
+      daggerCompiler: "com.google.dagger:dagger-compiler:$versions.dagger",
+      javax         : "org.glassfish:javax.annotation:$versions.javax",
       crashlytics   : "com.crashlytics.sdk.android:crashlytics:${versions.crashlytics}@aar",
   ]
 
   plugins = [
       android: 'com.android.application',
       fabric : 'io.fabric',
+      apt    : 'com.neenbedankt.android-apt',
   ]
 
   repositories = [

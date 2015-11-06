@@ -4,10 +4,12 @@ buildscript {
   }
   dependencies {
     classpath rootProject.ext.dependencies.android
+    classpath rootProject.ext.dependencies.apt
     classpath rootProject.ext.dependencies.fabric
   }
 }
 apply plugin: rootProject.ext.plugins.android
+apply plugin: rootProject.ext.plugins.apt
 apply plugin: rootProject.ext.plugins.fabric
 
 repositories {
@@ -62,7 +64,8 @@ dependencies {
   compile rootProject.ext.dependencies.retrofit
   compile rootProject.ext.dependencies.okhttp
   compile rootProject.ext.dependencies.dagger
-  provided rootProject.ext.dependencies.daggerCompiler
+  apt rootProject.ext.dependencies.daggerCompiler
+  provided rootProject.ext.dependencies.javax
 
   compile(rootProject.ext.dependencies.crashlytics) {
     transitive = true;
