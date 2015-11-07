@@ -1,4 +1,4 @@
-package yuejia.liu.musseta;
+package yuejia.liu.musseta.ui;
 
 import android.content.Context;
 import android.os.Build;
@@ -18,8 +18,6 @@ import android.widget.ViewAnimator;
 
 /**
  * An simple swipe refresh recycler fragment.
- *
- * @author longkai
  */
 public class MussetaRecyclerFragment extends Fragment {
   private ViewAnimator       rootView;
@@ -75,6 +73,7 @@ public class MussetaRecyclerFragment extends Fragment {
 
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
+    setupFragmentComponent();
   }
 
   @Override public void onDestroyView() {
@@ -128,4 +127,6 @@ public class MussetaRecyclerFragment extends Fragment {
       swipeRefreshLayout.setVisibility(View.GONE);
     }
   }
+
+  protected void setupFragmentComponent() {}
 }

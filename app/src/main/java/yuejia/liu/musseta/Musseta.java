@@ -1,6 +1,8 @@
 package yuejia.liu.musseta;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -8,13 +10,16 @@ import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 /**
- * Musseta app.
- *
- * @author longkai
+ * Musseta application.
  */
 public class Musseta extends Application {
+  private MussetaComponent applicationComponent;
+
   @Override public void onCreate() {
     super.onCreate();
+
+    setupAppComponent();
+
     if (BuildConfig.DEBUG) {
       Timber.plant(new Timber.DebugTree());
     } else {
@@ -29,6 +34,23 @@ public class Musseta extends Application {
       });
       Fabric.with(this, new Crashlytics());
     }
+  }
 
+  private void setupAppComponent() {
+    applicationComponent = DaggerMussetaComponent.builder()
+        .applicationModule(new MussetaModules.ApplicationModule(this))
+        .build();
+  }
+
+  public MussetaComponent getMussetaComponent() {
+    return applicationComponent;
+  }
+
+  @VisibleForTesting public void setMussetaComponent(MussetaComponent applicationComponent) {
+    this.applicationComponent = applicationComponent;
+  }
+
+  public static Musseta get(Context context) {
+    return (Musseta) context.getApplicationContext();
   }
 }

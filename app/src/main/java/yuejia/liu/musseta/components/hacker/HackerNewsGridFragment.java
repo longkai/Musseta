@@ -1,4 +1,12 @@
-package yuejia.liu.musseta.ui;
+package yuejia.liu.musseta.components.hacker;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.inject.Inject;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import retrofit.RetrofitError;
 import rx.Observable;
 import rx.Subscriber;
@@ -27,32 +36,19 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.Subscriptions;
-import yuejia.liu.musseta.MussetaActivity;
-import yuejia.liu.musseta.MussetaRecyclerFragment;
+import yuejia.liu.musseta.Musseta;
 import yuejia.liu.musseta.R;
-import yuejia.liu.musseta.api.hn.HackerNewsApi;
-import yuejia.liu.musseta.api.hn.HackerNewsApiModule;
-import yuejia.liu.musseta.model.hn.Item;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.inject.Inject;
+import yuejia.liu.musseta.ui.MussetaRecyclerFragment;
 
 /**
  * Staggered grid item.  NOTE: this is still in test environment!
- *
- * @author longkai
  */
 public class HackerNewsGridFragment extends MussetaRecyclerFragment implements SwipeRefreshLayout.OnRefreshListener {
   private static final int DEFAULT_VERTICAL_GRID_SPAN = 2;
 
   private static final String KEY_SINGLE_COLUMN = "single_column";
 
-  HackerNewsApi hackerNewsApi;
+  @Inject HackerNewsApi hackerNewsApi;
 
   private Subscription listRequest    = Subscriptions.empty();
   private Subscription colorProcessor = Subscriptions.empty();
@@ -71,8 +67,6 @@ public class HackerNewsGridFragment extends MussetaRecyclerFragment implements S
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setHasOptionsMenu(true);
-    HackerNewsApiModule module = new HackerNewsApiModule();
-    hackerNewsApi = module.provideHackerNewsApi();
   }
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -196,7 +190,8 @@ public class HackerNewsGridFragment extends MussetaRecyclerFragment implements S
                 color700 = getResources().getColor(palette.getField(color + "700").getInt(null));
                 color900 = getResources().getColor(palette.getField(color + "900").getInt(null));
               }
-            } catch (Exception ignore) {}
+            } catch (Exception ignore) {
+            }
           }
         }
         subscriber.onNext(null);
@@ -209,7 +204,7 @@ public class HackerNewsGridFragment extends MussetaRecyclerFragment implements S
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
               getActivity().getWindow().setStatusBarColor(color700);
               getActivity().getWindow().setNavigationBarColor(color900);
-              ((MussetaActivity) getActivity()).setToolbarColor(color500);
+              ((HackerNewsActivity) getActivity()).setToolbarColor(color500);
             }
           }
         });
@@ -224,6 +219,10 @@ public class HackerNewsGridFragment extends MussetaRecyclerFragment implements S
     colorProcessor.unsubscribe();
     listRequest.unsubscribe();
     super.onDestroyView();
+  }
+
+  @Override protected void setupFragmentComponent() {
+    Musseta.get(getActivity()).getMussetaComponent().plus(new HackerNewsModule()).inject(this);
   }
 
   static class HackerNewsViewHolder extends RecyclerView.ViewHolder {

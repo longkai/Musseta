@@ -1,12 +1,10 @@
-package yuejia.liu.musseta.model.hn;
+package yuejia.liu.musseta.components.hacker;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
  * HN item model.
- *
- * @author longkai
  */
 public class Item implements Parcelable {
   public long    id;
