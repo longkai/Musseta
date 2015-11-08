@@ -159,7 +159,13 @@ public class HackerNewsActivity extends MussetaActivity implements SwipeRefreshL
     private final ArrayList<Item> items = new ArrayList<>();
 
     @Override public HackerNewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      return new HackerNewsViewHolder(LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false));
+      final Context context = parent.getContext();
+      View itemView = LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false);
+
+      int resourceId = ((HackerNewsActivity) context).resourceManager.getResourceId(R.attr.selectableItemBackground);
+      itemView.setBackgroundResource(resourceId);
+
+      return new HackerNewsViewHolder(itemView);
     }
 
     @Override public void onBindViewHolder(HackerNewsViewHolder holder, int position) {
@@ -167,8 +173,6 @@ public class HackerNewsActivity extends MussetaActivity implements SwipeRefreshL
       holder.title.setText(item.title);
       holder.title.setTag(item);
 
-      int resourceId = ((HackerNewsActivity) holder.title.getContext()).resourceManager.getResourceId(R.attr.selectableItemBackground);
-      holder.title.setBackgroundResource(resourceId);
     }
 
     public void append(Item item) {
