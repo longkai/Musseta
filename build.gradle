@@ -65,6 +65,7 @@ ext {
 
   plugins = [
       android    : 'com.android.application',
+      androidTest: 'com.android.test',
       fabric     : 'io.fabric',
       apt        : 'com.neenbedankt.android-apt',
       retrolambda: 'me.tatarka.retrolambda',

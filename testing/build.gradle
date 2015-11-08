@@ -1,0 +1,28 @@
+buildscript {
+  dependencies {
+    classpath rootProject.ext.dependencies.android
+  }
+}
+apply plugin: rootProject.ext.plugins.androidTest
+
+android {
+  compileSdkVersion rootProject.ext.versions.compileSdk
+  buildToolsVersion rootProject.ext.versions.buildTools
+
+  // Set the target app project. The module specified here should contain the production code test should run against.
+  targetProjectPath ':app'
+  targetVariant 'mussetaDebug'
+
+  defaultConfig {
+    minSdkVersion 9
+    targetSdkVersion rootProject.ext.versions.targetSdk
+
+    // The package name of the test app
+    testApplicationId 'yuejia.liu.musseta.testing'
+    // The Instrumentation test runner used to run tests
+    testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+  }
+}
+
+dependencies {
+}

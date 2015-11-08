@@ -1,26 +1,28 @@
 buildscript {
-  repositories {
-    maven { url rootProject.ext.repositories.fabric }
-  }
+//  repositories {
+//    maven { url rootProject.ext.repositories.fabric }
+//  }
   dependencies {
     classpath rootProject.ext.dependencies.android
     classpath rootProject.ext.dependencies.retrolambda
     classpath rootProject.ext.dependencies.apt
-    classpath rootProject.ext.dependencies.fabric
+//    classpath rootProject.ext.dependencies.fabric
   }
 }
 apply plugin: rootProject.ext.plugins.android
 apply plugin: rootProject.ext.plugins.retrolambda
 apply plugin: rootProject.ext.plugins.apt
-apply plugin: rootProject.ext.plugins.fabric
+//apply plugin: rootProject.ext.plugins.fabric
 
-repositories {
-  maven { url rootProject.ext.repositories.fabric }
-}
+//repositories {
+//  maven { url rootProject.ext.repositories.fabric }
+//}
 
 android {
   compileSdkVersion rootProject.ext.versions.compileSdk
   buildToolsVersion rootProject.ext.versions.buildTools
+
+  publishNonDefault true
 
   defaultConfig {
     applicationId "yuejia.liu.musseta"
@@ -28,6 +30,9 @@ android {
     targetSdkVersion rootProject.ext.versions.targetSdk
     versionCode 1
     versionName "1.0"
+
+    testInstrumentationRunnerArguments disableAnalytics: 'true'
+    // testInstrumentationRunnerArgument "argument1", "make_test_fail"
   }
 
   compileOptions {
@@ -36,13 +41,24 @@ android {
   }
 
   buildTypes {
+    debug {
+      testCoverageEnabled = true
+    }
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }
 
+  // Always show the result of every unit test, even if it passes.
+  testOptions.unitTests.all {
+    testLogging {
+      events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+    }
+  }
+
   lintOptions {
+    abortOnError false
     disable 'InvalidPackage'
   }
 
@@ -78,7 +94,7 @@ dependencies {
   apt rootProject.ext.dependencies.daggerCompiler
   provided rootProject.ext.dependencies.javax
 
-  compile(rootProject.ext.dependencies.crashlytics) {
-    transitive = true;
-  }
+//  compile(rootProject.ext.dependencies.crashlytics) {
+//    transitive = true;
+//  }
 }

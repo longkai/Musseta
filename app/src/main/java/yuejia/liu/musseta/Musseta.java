@@ -5,8 +5,8 @@ import android.content.Context;
 import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
+//import com.crashlytics.android.Crashlytics;
+//import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 /**
@@ -23,16 +23,17 @@ public class Musseta extends Application {
     if (BuildConfig.DEBUG) {
       Timber.plant(new Timber.DebugTree());
     } else {
-      Timber.plant(new Timber.Tree() {
-        @Override protected void log(int priority, String tag, String message, Throwable t) {
-          if (priority == Log.WARN) {
-            Crashlytics.log(priority, tag, message);
-          } else if (priority >= Log.ERROR) {
-            Crashlytics.logException(t);
-          }
-        }
-      });
-      Fabric.with(this, new Crashlytics());
+      // TODO: 11/9/15 separate test and production code
+//      Timber.plant(new Timber.Tree() {
+//        @Override protected void log(int priority, String tag, String message, Throwable t) {
+//          if (priority == Log.WARN) {
+//            Crashlytics.log(priority, tag, message);
+//          } else if (priority >= Log.ERROR) {
+//            Crashlytics.logException(t);
+//          }
+//        }
+//      });
+//      Fabric.with(this, new Crashlytics());
     }
   }
 
