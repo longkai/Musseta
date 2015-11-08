@@ -7,14 +7,22 @@ import dagger.Provides;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
+import rx.subscriptions.CompositeSubscription;
 import yuejia.liu.musseta.BuildConfig;
 import yuejia.liu.musseta.components.ActivityScope;
+import yuejia.liu.musseta.ui.ResourceManager;
 
 /**
  * The Hacker News module.
  */
 @Module
 public class HackerNewsModule {
+  private final HackerNewsActivity activity;
+
+  public HackerNewsModule(HackerNewsActivity activity) {
+    this.activity = activity;
+  }
+
   @Provides @ActivityScope @HackerNews RestAdapter providesRestAdapter(OkHttpClient okHttpClient, Gson gson) {
     return new RestAdapter.Builder()
         .setClient(new OkClient(okHttpClient))
@@ -26,5 +34,18 @@ public class HackerNewsModule {
 
   @Provides @ActivityScope HackerNewsApi providesHackerNewsApi(@HackerNews RestAdapter restAdapter) {
     return restAdapter.create(HackerNewsApi.class);
+  }
+
+  @Provides @ActivityScope CompositeSubscription providesSubscriptions() {
+    return new CompositeSubscription();
+  }
+
+  @Provides @ActivityScope
+  HackerNewsPresenter providesHackerNewsPresenter(HackerNewsApi api, CompositeSubscription subscriptions) {
+    return new HackerNewsPresenter(activity, api, subscriptions);
+  }
+
+  @Provides @ActivityScope ResourceManager providesResourceManager() {
+    return new ResourceManager(activity);
   }
 }

@@ -40,6 +40,14 @@ android {
     }
   }
 
+  lintOptions {
+    disable 'InvalidPackage'
+  }
+
+  packagingOptions {
+    exclude 'META-INF/services/javax.annotation.processing.Processor'
+  }
+
   productFlavors {
     musseta {
       manifestPlaceholders = ["channel": "musseta"]
@@ -59,6 +67,7 @@ dependencies {
   compile rootProject.ext.dependencies.appcompat
   compile rootProject.ext.dependencies.recyclerview
 
+  compile rootProject.ext.dependencies.butterKnife
   compile rootProject.ext.dependencies.timber
   compile rootProject.ext.dependencies.picasso
   compile rootProject.ext.dependencies.retrofit

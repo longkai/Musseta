@@ -8,7 +8,7 @@ import rx.Observable;
  * The Hacker News api.
  */
 public interface HackerNewsApi {
-  @GET("/topstories.json") long[] topStories();
+  @GET("/topstories.json") Observable<Long[]> topStories();
 
   @GET("/item/{id}.json") Item item(@Path("id") long id);
 
