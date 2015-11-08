@@ -32,10 +32,6 @@ public class MussetaModules {
       this.application = application;
     }
 
-    @Provides @Singleton SharedPreferences providesPreference() {
-      return PreferenceManager.getDefaultSharedPreferences(providesApplication());
-    }
-
     @Provides @Singleton Application providesApplication() {
       return application;
     }
