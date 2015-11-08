@@ -5,7 +5,6 @@ import android.widget.Toast;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
@@ -28,17 +27,9 @@ public class HackerNewsPresenter {
     activity.showLoading(true);
 
     subscriptions.add(hackerNewsApi.topStories()
-        .flatMap(new Func1<Long[], Observable<Long>>() {
-          @Override public Observable<Long> call(Long[] longs) {
-            return Observable.from(longs);
-          }
-        })
+        .flatMap(longs -> Observable.from(longs))
         .take(50) // TODO: 11/8/15 further impl
-        .map(new Func1<Long, Item>() {
-          @Override public Item call(Long id) {
-            return hackerNewsApi.item(id);
-          }
-        })
+        .map(id -> hackerNewsApi.item(id))
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new Observer<Item>() {

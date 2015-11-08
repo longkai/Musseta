@@ -143,11 +143,7 @@ public class HackerNewsActivity extends MussetaActivity implements SwipeRefreshL
         return true;
       }
     });
-    toolbar.setOnTouchListener(new View.OnTouchListener() {
-      @Override public boolean onTouch(View v, MotionEvent event) {
-        return detectorCompat.onTouchEvent(event);
-      }
-    });
+    toolbar.setOnTouchListener((v, event) -> detectorCompat.onTouchEvent(event));
   }
 
   void appendAll(ArrayList<Item> items) {

@@ -6,7 +6,6 @@ import javax.inject.Singleton;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 
@@ -51,11 +50,7 @@ public class MussetaModules {
     @Provides @Singleton Picasso providesPicasso(Application application, OkHttpClient okHttpClient) {
       return new Picasso.Builder(application)
           .downloader(new OkHttpDownloader(okHttpClient))
-          .listener(new Picasso.Listener() {
-            @Override public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-              Timber.e(exception, "download [%s] fail", uri);
-            }
-          })
+          .listener((picasso, uri, exception) -> Timber.e(exception, "download [%s] fail", uri))
           .loggingEnabled(BuildConfig.DEBUG)
           .indicatorsEnabled(BuildConfig.DEBUG)
           .build();

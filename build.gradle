@@ -18,6 +18,7 @@ ext {
       android       : '1.3.1',
       fabric        : '1.+',
       apt           : '1.8',
+      retrolambda   : '3.2.3',
       // build config
       compileSdk    : 23,
       targetSdk     : 23,
@@ -42,6 +43,7 @@ ext {
       android       : "com.android.tools.build:gradle:$versions.android",
       fabric        : "io.fabric.tools:gradle:$versions.fabric",
       apt           : "com.neenbedankt.gradle.plugins:android-apt:$versions.apt",
+      retrolambda   : "me.tatarka:gradle-retrolambda:$versions.retrolambda",
       // dependencies
       palette       : "material:palette:$versions.palette",
       v4            : "com.android.support:cardview-v7:$versions.supportLibrary",
@@ -62,9 +64,10 @@ ext {
   ]
 
   plugins = [
-      android: 'com.android.application',
-      fabric : 'io.fabric',
-      apt    : 'com.neenbedankt.android-apt',
+      android    : 'com.android.application',
+      fabric     : 'io.fabric',
+      apt        : 'com.neenbedankt.android-apt',
+      retrolambda: 'me.tatarka.retrolambda',
   ]
 
   repositories = [
