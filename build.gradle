@@ -28,7 +28,7 @@ ext {
       // build config
       compileSdk    : 23,
       targetSdk     : 23,
-      buildTools    : '23.0.2',
+      buildTools    : '23.0.1',
       // testing
       mockito       : '1.+',
       dexmaker      : '1.2',

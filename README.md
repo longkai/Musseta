@@ -1,5 +1,7 @@
 Musseta
 ===
+[![Build Status](https://travis-ci.org/longkai/Musseta.svg?branch=dev)](https://travis-ci.org/longkai/Musseta)
+
 ### A nice way to write an Android app :smiley:
 Currently, it simply fetches the top stories form **Hacker News** with its official API.
 
