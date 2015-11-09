@@ -40,10 +40,7 @@ public class MussetaModules {
   static class NetworkModule {
     @Provides @Singleton OkHttpClient providesOkHttpClient(Application application) {
       OkHttpClient client = new OkHttpClient();
-      final String dir = Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
-          || !Environment.isExternalStorageRemovable()
-          ? application.getExternalCacheDir().getPath() : application.getCacheDir().getPath();
-      client.setCache(new Cache(new File(dir + File.separator + "http"), 50L * 1024 * 1024));
+      client.setCache(new Cache(new File(application.getCacheDir().getPath() + File.separator + "okHttp"), 50L * 1024 * 1024));
       return client;
     }
 
