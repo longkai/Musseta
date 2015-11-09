@@ -1,28 +1,28 @@
 buildscript {
-//  repositories {
-//    maven { url rootProject.ext.repositories.fabric }
-//  }
+  repositories {
+    maven { url rootProject.ext.repositories.fabric }
+  }
   dependencies {
     classpath rootProject.ext.dependencies.android
     classpath rootProject.ext.dependencies.retrolambda
     classpath rootProject.ext.dependencies.apt
-//    classpath rootProject.ext.dependencies.fabric
+    classpath rootProject.ext.dependencies.fabric
   }
 }
 apply plugin: rootProject.ext.plugins.android
 apply plugin: rootProject.ext.plugins.retrolambda
 apply plugin: rootProject.ext.plugins.apt
-//apply plugin: rootProject.ext.plugins.fabric
+apply plugin: rootProject.ext.plugins.fabric
 
-//repositories {
-//  maven { url rootProject.ext.repositories.fabric }
-//}
+repositories {
+  maven { url rootProject.ext.repositories.fabric }
+}
 
 android {
   compileSdkVersion rootProject.ext.versions.compileSdk
   buildToolsVersion rootProject.ext.versions.buildTools
 
-  publishNonDefault true
+//  publishNonDefault true
 
   defaultConfig {
     applicationId "yuejia.liu.musseta"
@@ -31,8 +31,10 @@ android {
     versionCode 1
     versionName "1.0"
 
+    testInstrumentationRunner 'yuejia.liu.musseta.MussetaTestingRunner'
+
     testInstrumentationRunnerArguments disableAnalytics: 'true'
-    // testInstrumentationRunnerArgument "argument1", "make_test_fail"
+//    testInstrumentationRunnerArgument "argument1", "make_test_fail"
   }
 
   compileOptions {
@@ -58,7 +60,7 @@ android {
   }
 
   lintOptions {
-    abortOnError false
+//    abortOnError false
     disable 'InvalidPackage'
   }
 
@@ -71,6 +73,11 @@ android {
       manifestPlaceholders = ["channel": "musseta"]
     }
   }
+}
+
+configurations {
+  androidTestCompile.exclude group: 'com.android.support', module: 'support-v4'
+  androidTestCompile.exclude group: 'com.android.support', module: 'recyclerview-v7'
 }
 
 dependencies {
@@ -94,7 +101,20 @@ dependencies {
   apt rootProject.ext.dependencies.daggerCompiler
   provided rootProject.ext.dependencies.javax
 
-//  compile(rootProject.ext.dependencies.crashlytics) {
-//    transitive = true;
-//  }
+  compile(rootProject.ext.dependencies.crashlytics) {
+    transitive = true;
+  }
+
+  // testing
+  androidTestCompile rootProject.ext.dependencies.mockito
+  androidTestCompile rootProject.ext.dependencies.dexmaker
+  androidTestCompile rootProject.ext.dependencies.dexmakerMockito
+
+  androidTestCompile rootProject.ext.dependencies.rules
+  androidTestCompile rootProject.ext.dependencies.runner
+  androidTestCompile rootProject.ext.dependencies.espresso
+  androidTestCompile rootProject.ext.dependencies.espressoContrib
+  androidTestCompile rootProject.ext.dependencies.espressoIntents
+
+  androidTestApt rootProject.ext.dependencies.daggerCompiler
 }

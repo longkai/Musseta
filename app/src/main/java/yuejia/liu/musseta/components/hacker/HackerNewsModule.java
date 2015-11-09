@@ -23,7 +23,7 @@ public class HackerNewsModule {
     this.activity = activity;
   }
 
-  @Provides @ActivityScope @HackerNews RestAdapter providesRestAdapter(OkHttpClient okHttpClient, Gson gson) {
+  @Provides @ActivityScope @HackerNews public RestAdapter providesRestAdapter(OkHttpClient okHttpClient, Gson gson) {
     return new RestAdapter.Builder()
         .setClient(new OkClient(okHttpClient))
         .setConverter(new GsonConverter(gson))
@@ -32,20 +32,20 @@ public class HackerNewsModule {
         .build();
   }
 
-  @Provides @ActivityScope HackerNewsApi providesHackerNewsApi(@HackerNews RestAdapter restAdapter) {
+  @Provides @ActivityScope public HackerNewsApi providesHackerNewsApi(@HackerNews RestAdapter restAdapter) {
     return restAdapter.create(HackerNewsApi.class);
   }
 
-  @Provides @ActivityScope CompositeSubscription providesSubscriptions() {
+  @Provides @ActivityScope public CompositeSubscription providesSubscriptions() {
     return new CompositeSubscription();
   }
 
   @Provides @ActivityScope
-  HackerNewsPresenter providesHackerNewsPresenter(HackerNewsApi api, CompositeSubscription subscriptions) {
+  public HackerNewsPresenter providesHackerNewsPresenter(HackerNewsApi api, CompositeSubscription subscriptions) {
     return new HackerNewsPresenter(activity, api, subscriptions);
   }
 
-  @Provides @ActivityScope ResourceManager providesResourceManager() {
+  @Provides @ActivityScope public ResourceManager providesResourceManager() {
     return new ResourceManager(activity);
   }
 }

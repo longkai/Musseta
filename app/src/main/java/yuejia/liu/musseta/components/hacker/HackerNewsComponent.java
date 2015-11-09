@@ -1,6 +1,7 @@
 package yuejia.liu.musseta.components.hacker;
 
 import dagger.Subcomponent;
+import yuejia.liu.musseta.components.ActivityComponent;
 import yuejia.liu.musseta.components.ActivityScope;
 
 /**
@@ -8,6 +9,5 @@ import yuejia.liu.musseta.components.ActivityScope;
  */
 @ActivityScope
 @Subcomponent(modules = HackerNewsModule.class)
-public interface HackerNewsComponent {
-  void inject(HackerNewsActivity activity);
+public interface HackerNewsComponent extends ActivityComponent<HackerNewsActivity> {
 }

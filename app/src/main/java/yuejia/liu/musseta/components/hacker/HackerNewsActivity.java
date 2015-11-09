@@ -37,7 +37,7 @@ import yuejia.liu.musseta.widgets.ListDividerItemDecorator;
 /**
  * Hacker News ui.
  */
-public class HackerNewsActivity extends MussetaActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> implements SwipeRefreshLayout.OnRefreshListener {
   private static final String KEY_PREVIOUS_POSITION = "key_previous_position";
   private static final String KEY_HACKER_NEWS_ITEMS = "key_hacker_news_items";
 
@@ -76,8 +76,8 @@ public class HackerNewsActivity extends MussetaActivity implements SwipeRefreshL
     Timber.d("bootstrapped...");
   }
 
-  @Override protected void setupActivityComponent() {
-    Musseta.get(this).getMussetaComponent().plus(new HackerNewsModule(this)).inject(this);
+  @Override protected HackerNewsComponent setupActivityComponent() {
+    return Musseta.get(this).getMussetaComponent().plus(new HackerNewsModule(this));
   }
 
   @Override protected void onSaveInstanceState(Bundle outState) {
