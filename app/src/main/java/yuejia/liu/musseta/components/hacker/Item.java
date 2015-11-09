@@ -23,6 +23,22 @@ public class Item implements Parcelable {
 
   public Item() {}
 
+  private Item(Builder builder) {
+    id = builder.id;
+    deleted = builder.deleted;
+    type = builder.type;
+    by = builder.by;
+    time = builder.time;
+    text = builder.text;
+    dead = builder.dead;
+    parent = builder.parent;
+    kids = builder.kids;
+    url = builder.url;
+    score = builder.score;
+    title = builder.title;
+    parts = builder.parts;
+  }
+
   @Override public int describeContents() { return 0; }
 
   @Override public void writeToParcel(Parcel dest, int flags) {
@@ -62,4 +78,89 @@ public class Item implements Parcelable {
 
     public Item[] newArray(int size) {return new Item[size];}
   };
+
+  public static final class Builder {
+    private long id;
+    private boolean deleted;
+    private String type;
+    private String by;
+    private long time;
+    private String text;
+    private boolean dead;
+    private long parent;
+    private long[] kids;
+    private String url;
+    private int score;
+    private String title;
+    private long[] parts;
+
+    public Builder() {}
+
+    public Builder id(long val) {
+      id = val;
+      return this;
+    }
+
+    public Builder deleted(boolean val) {
+      deleted = val;
+      return this;
+    }
+
+    public Builder type(String val) {
+      type = val;
+      return this;
+    }
+
+    public Builder by(String val) {
+      by = val;
+      return this;
+    }
+
+    public Builder time(long val) {
+      time = val;
+      return this;
+    }
+
+    public Builder text(String val) {
+      text = val;
+      return this;
+    }
+
+    public Builder dead(boolean val) {
+      dead = val;
+      return this;
+    }
+
+    public Builder parent(long val) {
+      parent = val;
+      return this;
+    }
+
+    public Builder kids(long[] val) {
+      kids = val;
+      return this;
+    }
+
+    public Builder url(String val) {
+      url = val;
+      return this;
+    }
+
+    public Builder score(int val) {
+      score = val;
+      return this;
+    }
+
+    public Builder title(String val) {
+      title = val;
+      return this;
+    }
+
+    public Builder parts(long[] val) {
+      parts = val;
+      return this;
+    }
+
+    public Item build() {return new Item(this);}
+  }
 }

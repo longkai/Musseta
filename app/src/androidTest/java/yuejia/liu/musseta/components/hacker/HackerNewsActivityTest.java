@@ -1,7 +1,18 @@
 package yuejia.liu.musseta.components.hacker;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
+
+import android.app.Activity;
+import android.app.Instrumentation;
+import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.rule.ActivityTestRule;
+import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.contrib.RecyclerViewActions;
+import android.support.test.espresso.intent.matcher.IntentMatchers;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
@@ -14,14 +25,26 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import retrofit.RestAdapter;
 import rx.Observable;
-import yuejia.liu.musseta.MussetaTestingRunner;
 import yuejia.liu.musseta.MussetaTesting;
+import yuejia.liu.musseta.MussetaTestingRunner;
+import yuejia.liu.musseta.R;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.longClick;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasType;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
+import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.when;
 
@@ -31,22 +54,28 @@ import static org.mockito.Mockito.when;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class HackerNewsActivityTest {
-  @Rule public ActivityTestRule<HackerNewsActivity> rule = new ActivityTestRule<>(HackerNewsActivity.class, true, false);
+  @Rule public IntentsTestRule<HackerNewsActivity> rule = new IntentsTestRule<>(HackerNewsActivity.class, true, false);
 
   @Mock HackerNewsApi hackerNewsApi;
 
-  Item startupItem; // single item for startup
+  List<Item> testingItems;
 
   @Before public void setUp() throws Exception {
-    startupItem = new Item();
-    startupItem.title = String.valueOf(System.currentTimeMillis());
+    SessionIdentifierGenerator generator = new SessionIdentifierGenerator();
 
+    testingItems = new ArrayList<>();
     MockitoAnnotations.initMocks(this);
-    when(hackerNewsApi.topStories()).thenReturn(Observable.just(new Long[]{Long.MIN_VALUE}));
-    when(hackerNewsApi.item(Long.MIN_VALUE)).thenReturn(startupItem);
+    // let' s start with 50 samples
+    Long[] ids = new Long[50];
+    when(hackerNewsApi.topStories()).thenReturn(Observable.just(ids));
+
+    for (int i = 0; i < ids.length; i++) {
+      ids[i] = Long.valueOf(i);
+      testingItems.add(new Item.Builder().title(generator.nextSessionId()).url("http://longist.me/items/" + i).build());
+      when(hackerNewsApi.item(ids[i])).thenReturn(testingItems.get(i));
+    }
 
     MussetaTestingRunner testRunner = (MussetaTestingRunner) InstrumentationRegistry.getInstrumentation();
-
     testRunner.addHooks((activity, bundle) -> {
       HackerNewsActivity hackerNewsActivity = (HackerNewsActivity) activity;
       HackerNewsTestingComponent hackerNewsTestingComponent = MussetaTesting.get(activity).getMussetaTestingComponent()
@@ -61,6 +90,10 @@ public class HackerNewsActivityTest {
 
     // launch it, boom!
     rule.launchActivity(null);
+
+    // By default Espresso Intents does not stub any Intents. Stubbing needs to be setup before
+    // every test run. In this case all external Intents will be blocked.
+    intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
   }
 
   @After public void tearDown() throws Exception {
@@ -72,6 +105,50 @@ public class HackerNewsActivityTest {
     // since espresso will wait util ui thread is idle,
     // so the first time espresso attach it, the items loading is done.
     onView(withId(android.R.id.progress)).check(matches(not(isDisplayed())));
-    onView(withText(startupItem.title)).check(matches(isDisplayed()));
+    onView(withId(R.id.recycler_view)).check(matches(isDisplayed()));
+  }
+
+  @Test public void testDoubleTapToTop() throws Exception {
+    onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.scrollToPosition(testingItems.size() - 1));
+    // che the first one is not displayed
+    onView(withText(testingItems.get(0).title)).check(doesNotExist());
+
+    onView(withId(R.id.toolbar)).perform(ViewActions.doubleClick());
+
+    // just check the first item is displayed
+    onView(withText(testingItems.get(0).title)).check(matches(isCompletelyDisplayed()));
+  }
+
+  @Test public void testTapItem() throws Exception {
+    int position = (int) (Math.random() * testingItems.size());
+
+    onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
+
+
+    intended(allOf(
+        hasAction(Intent.ACTION_VIEW),
+        IntentMatchers.hasData(testingItems.get(position).url)
+    ));
+  }
+
+  @Test public void testLongTapItem() throws Exception {
+    int position = (int) (Math.random() * testingItems.size());
+    String targetTitle = testingItems.get(position).title;
+
+    onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(position, longClick()));
+
+    intended(allOf(
+        hasAction(Intent.ACTION_SEND),
+        hasExtra(Intent.EXTRA_TITLE, targetTitle),
+        hasType(rule.getActivity().getString(R.string.mime_text_plain))
+    ));
+  }
+
+  public final class SessionIdentifierGenerator {
+    private SecureRandom random = new SecureRandom();
+
+    public String nextSessionId() {
+      return new BigInteger(130, random).toString(32);
+    }
   }
 }
