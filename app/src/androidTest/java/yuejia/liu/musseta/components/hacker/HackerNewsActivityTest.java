@@ -9,9 +9,7 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
-import android.support.test.espresso.intent.matcher.IntentMatchers;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
@@ -31,21 +29,24 @@ import yuejia.liu.musseta.R;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.doubleClick;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasType;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
-import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
@@ -64,6 +65,7 @@ public class HackerNewsActivityTest {
     SessionIdentifierGenerator generator = new SessionIdentifierGenerator();
 
     testingItems = new ArrayList<>();
+    // TODO: 11/12/15 this result a null member NPE bug, the library should fix it..
     MockitoAnnotations.initMocks(this);
     // let' s start with 50 samples
     Long[] ids = new Long[50];
@@ -113,10 +115,10 @@ public class HackerNewsActivityTest {
     // che the first one is not displayed
     onView(withText(testingItems.get(0).title)).check(doesNotExist());
 
-    onView(withId(R.id.toolbar)).perform(ViewActions.doubleClick());
+    onView(withId(R.id.toolbar)).perform(doubleClick());
 
-    // just check the first item is displayed
-    onView(withText(testingItems.get(0).title)).check(matches(isCompletelyDisplayed()));
+    // yet another way to check the first item matches
+    assertThat(rule.getActivity().layoutManager.findFirstCompletelyVisibleItemPosition(), is(0));
   }
 
   @Test public void testTapItem() throws Exception {
@@ -124,10 +126,9 @@ public class HackerNewsActivityTest {
 
     onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
 
-
     intended(allOf(
         hasAction(Intent.ACTION_VIEW),
-        IntentMatchers.hasData(testingItems.get(position).url)
+        hasData(testingItems.get(position).url)
     ));
   }
 
