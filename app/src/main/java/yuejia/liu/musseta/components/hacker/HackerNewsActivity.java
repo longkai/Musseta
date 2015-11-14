@@ -7,10 +7,12 @@ import javax.inject.Inject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -145,8 +147,7 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
         return makeMovementFlags(0, swipeFlags);
       }
 
-      @Override
-      public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+      @Override public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
         return false;
       }
 
@@ -157,6 +158,11 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
 
       @Override public boolean isItemViewSwipeEnabled() {
         return true;
+      }
+
+      @Override public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        ViewCompat.setAlpha(viewHolder.itemView, 1 - Math.abs(dX) * 2 / viewHolder.itemView.getWidth());
       }
     });
   }
