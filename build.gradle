@@ -37,7 +37,7 @@ ext {
       espresso      : '2.2.1',
       // dependencies
       palette       : '1.0',
-      supportLibrary: '23.1.0',
+      supportLibrary: '23.1.1',
       rxandroid     : '1.0.1',
       rxjava        : '1.0.14',
       butterKnife   : '7.0.1',
@@ -73,6 +73,7 @@ ext {
       rxjava         : "io.reactivex:rxjava:$versions.rxjava",
       butterKnife    : "com.jakewharton:butterknife:$versions.butterKnife",
       appcompat      : "com.android.support:appcompat-v7:$versions.supportLibrary",
+      design         : "com.android.support:design:$versions.supportLibrary",
       cardview       : "com.android.support:cardview-v7:$versions.supportLibrary",
       recyclerview   : "com.android.support:recyclerview-v7:$versions.supportLibrary",
       timber         : "com.jakewharton.timber:timber:$versions.timber",
