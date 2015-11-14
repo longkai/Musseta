@@ -9,12 +9,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.format.DateUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -191,19 +197,25 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
 
     @Override public HackerNewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
       final Context context = parent.getContext();
-      View itemView = LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false);
-
-      int resourceId = ((HackerNewsActivity) context).resourceManager.getResourceId(R.attr.selectableItemBackground);
-      itemView.setBackgroundResource(resourceId);
-
+      View itemView = LayoutInflater.from(context).inflate(R.layout.layout_hacker_news_item, parent, false);
       return new HackerNewsViewHolder(itemView);
     }
 
     @Override public void onBindViewHolder(HackerNewsViewHolder holder, int position) {
       Item item = items.get(position);
-      holder.title.setText(item.title);
-      holder.title.setTag(item);
+      holder.itemView.setTag(item);
+      final Context context = holder.itemView.getContext();
 
+      SpannableString title = new SpannableString(String.format("%s (%s)", item.title, Uri.parse(item.url).getHost()));
+      int start = item.title.length() + 1;
+      int end = title.length();
+      title.setSpan(new RelativeSizeSpan(.8f), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+      title.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.material_grey_500)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+      holder.title.setText(title);
+
+      holder.subTitle.setText(context.getString(
+          R.string.hacker_news_item_subtitle, item.score, item.by, DateUtils.getRelativeTimeSpanString(item.time)));
     }
 
     public void append(Item item) {
@@ -246,16 +258,17 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
   }
 
   static class HackerNewsViewHolder extends RecyclerView.ViewHolder {
-    @Bind(android.R.id.text1) TextView title;
+    @Bind(android.R.id.title) TextView title;
+    @Bind(android.R.id.text1) TextView subTitle;
 
-    @OnClick(android.R.id.text1) void onItemClick(TextView title) {
-      Item item = (Item) title.getTag();
-      title.getContext().startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(item.url)));
+    @OnClick(R.id.rootView) void onItemClick(View view) {
+      Item item = (Item) view.getTag();
+      view.getContext().startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(item.url)));
     }
 
-    @OnLongClick(android.R.id.text1) boolean onItemLongClick(TextView title) {
-      Item item = (Item) title.getTag();
-      final Context context = title.getContext();
+    @OnLongClick(R.id.rootView) boolean onItemLongClick(View view) {
+      Item item = (Item) view.getTag();
+      final Context context = view.getContext();
       Intent intent = new Intent(Intent.ACTION_SEND);
       intent.setType(context.getString(R.string.mime_text_plain));
       intent.putExtra(Intent.EXTRA_TITLE, item.title);
