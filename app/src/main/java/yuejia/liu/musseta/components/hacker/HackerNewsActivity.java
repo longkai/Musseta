@@ -1,6 +1,7 @@
 package yuejia.liu.musseta.components.hacker;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.inject.Inject;
 
@@ -13,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -29,6 +31,7 @@ import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 import yuejia.liu.musseta.Musseta;
 import yuejia.liu.musseta.R;
+import yuejia.liu.musseta.ui.ItemTouchHelperAdapter;
 import yuejia.liu.musseta.ui.MussetaActivity;
 import yuejia.liu.musseta.ui.ResourceManager;
 import yuejia.liu.musseta.widgets.ListDividerItemDecorator;
@@ -53,6 +56,7 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
   HackerNewsAdapter        hackerNewsAdapter;
   LinearLayoutManager      layoutManager;
   ListDividerItemDecorator dividerItemDecorator;
+  ItemTouchHelper          itemTouchHelper;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -90,7 +94,8 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
   }
 
   @Override protected void onDestroy() {
-    recyclerView.removeItemDecoration(dividerItemDecorator);
+    recyclerView.removeItemDecoration(dividerItemDecorator); // let it destroy callbacks
+    itemTouchHelper.attachToRecyclerView(null);
     subscriptions.unsubscribe();
     super.onDestroy();
   }
@@ -98,17 +103,6 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
   @Override public void onRefresh() {
     hackerNewsAdapter.empty();
     presenter.refresh();
-  }
-
-  // presenter method
-  void showRefreshing(boolean refreshing) {
-    if (refreshLayout.isRefreshing() != refreshing) {
-      refreshLayout.setRefreshing(refreshing);
-    }
-  }
-
-  void showLoading(boolean loading) {
-    progress.setVisibility(loading ? View.VISIBLE : View.GONE);
   }
 
   void setupViews() {
@@ -131,8 +125,34 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
     dividerItemDecorator = new ListDividerItemDecorator(this);
     recyclerView.addItemDecoration(dividerItemDecorator);
 
+    itemTouchHelper = setupItemTouchHelper();
+    itemTouchHelper.attachToRecyclerView(recyclerView);
+
     hackerNewsAdapter = new HackerNewsAdapter();
     recyclerView.setAdapter(hackerNewsAdapter);
+  }
+
+  private ItemTouchHelper setupItemTouchHelper() {
+    return new ItemTouchHelper(new ItemTouchHelper.Callback() {
+      @Override public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+        return makeMovementFlags(0, swipeFlags);
+      }
+
+      @Override
+      public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+        return false;
+      }
+
+      @Override public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+        hackerNewsAdapter.onItemDismiss(viewHolder.getAdapterPosition());
+        recyclerView.removeView(viewHolder.itemView); // redraw the divider line
+      }
+
+      @Override public boolean isItemViewSwipeEnabled() {
+        return true;
+      }
+    });
   }
 
   private void setupToolbar() {
@@ -146,6 +166,17 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
     toolbar.setOnTouchListener((v, event) -> detectorCompat.onTouchEvent(event));
   }
 
+  // presenter method
+  void showRefreshing(boolean refreshing) {
+    if (refreshLayout.isRefreshing() != refreshing) {
+      refreshLayout.setRefreshing(refreshing);
+    }
+  }
+
+  void showLoading(boolean loading) {
+    progress.setVisibility(loading ? View.VISIBLE : View.GONE);
+  }
+
   void appendAll(ArrayList<Item> items) {
     hackerNewsAdapter.appendAll(items);
   }
@@ -155,7 +186,7 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
   }
   // presenter
 
-  static class HackerNewsAdapter extends RecyclerView.Adapter<HackerNewsViewHolder> {
+  static class HackerNewsAdapter extends RecyclerView.Adapter<HackerNewsViewHolder> implements ItemTouchHelperAdapter {
     private final ArrayList<Item> items = new ArrayList<>();
 
     @Override public HackerNewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -193,6 +224,24 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
 
     @Override public int getItemCount() {
       return items.size();
+    }
+
+    @Override public void onItemMove(int fromPosition, int toPosition) {
+      if (fromPosition < toPosition) {
+        for (int i = fromPosition; i < toPosition; i++) {
+          Collections.swap(items, i, i + 1);
+        }
+      } else {
+        for (int i = fromPosition; i > toPosition; i--) {
+          Collections.swap(items, i, i - 1);
+        }
+      }
+      notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override public void onItemDismiss(int position) {
+      items.remove(position);
+      notifyItemRemoved(position);
     }
   }
 
