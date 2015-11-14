@@ -25,27 +25,27 @@ import yuejia.liu.musseta.misc.NetworkWatcher;
  */
 public class MussetaModules {
   @Module
-  static class ApplicationModule {
+  public static class ApplicationModule {
     final Application application;
 
-    ApplicationModule(Application application) {
+    public ApplicationModule(Application application) {
       this.application = application;
     }
 
-    @Provides @Singleton Application providesApplication() {
+    @Provides @Singleton protected Application providesApplication() {
       return application;
     }
   }
 
   @Module
-  static class NetworkModule {
-    @Provides @Singleton OkHttpClient providesOkHttpClient(Application application) {
+  public static class NetworkModule {
+    @Provides @Singleton protected OkHttpClient providesOkHttpClient(Application application) {
       OkHttpClient client = new OkHttpClient();
       client.setCache(new Cache(new File(application.getCacheDir().getPath() + File.separator + "okHttp"), 50L * 1024 * 1024));
       return client;
     }
 
-    @Provides @Singleton Picasso providesPicasso(Application application, OkHttpClient okHttpClient) {
+    @Provides @Singleton protected Picasso providesPicasso(Application application, OkHttpClient okHttpClient) {
       return new Picasso.Builder(application)
           .downloader(new OkHttpDownloader(okHttpClient))
           .listener((picasso, uri, exception) -> Timber.e(exception, "download [%s] fail", uri))
@@ -54,21 +54,21 @@ public class MussetaModules {
           .build();
     }
 
-    @Provides @Singleton NetworkWatcher providesNetworkWatcher(Application application) {
+    @Provides @Singleton protected NetworkWatcher providesNetworkWatcher(Application application) {
       return new NetworkWatcher(application);
     }
   }
 
   @Module
-  static class StorageModule {
-    @Provides @Singleton SharedPreferences providesPreferences(Application application) {
+  public static class StorageModule {
+    @Provides @Singleton protected SharedPreferences providesPreferences(Application application) {
       return PreferenceManager.getDefaultSharedPreferences(application);
     }
   }
 
   @Module
-  static class UtilityModule {
-    @Provides @Singleton Gson providesGson() {
+  public static class UtilityModule {
+    @Provides @Singleton protected Gson providesGson() {
       GsonBuilder builder = new GsonBuilder();
       if (BuildConfig.DEBUG) {
         builder.setPrettyPrinting();

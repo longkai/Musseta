@@ -3,7 +3,11 @@ package yuejia.liu.musseta;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnitRunner;
 
 /**
@@ -34,5 +38,9 @@ public class MussetaTestingRunner extends AndroidJUnitRunner {
 
   public interface Hooks {
     void callActivityOnCreate(Activity activity, Bundle bundle);
+  }
+
+  public static MussetaTestingRunner get() {
+    return (MussetaTestingRunner) InstrumentationRegistry.getInstrumentation();
   }
 }

@@ -4,16 +4,21 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,9 +28,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import retrofit.RestAdapter;
 import rx.Observable;
+import timber.log.Timber;
+import yuejia.liu.musseta.DaggerMussetaTestingComponent;
+import yuejia.liu.musseta.MussetaModules;
 import yuejia.liu.musseta.MussetaTesting;
 import yuejia.liu.musseta.MussetaTestingRunner;
 import yuejia.liu.musseta.R;
+import yuejia.liu.musseta.misc.NetworkWatcher;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -57,7 +66,8 @@ import static org.mockito.Mockito.when;
 public class HackerNewsActivityTest {
   @Rule public IntentsTestRule<HackerNewsActivity> rule = new IntentsTestRule<>(HackerNewsActivity.class, true, false);
 
-  @Mock HackerNewsApi hackerNewsApi;
+  @Mock HackerNewsApi  hackerNewsApi;
+  @Mock NetworkWatcher networkWatcher;
 
   List<Item> testingItems;
 
@@ -77,8 +87,7 @@ public class HackerNewsActivityTest {
       when(hackerNewsApi.item(ids[i])).thenReturn(testingItems.get(i));
     }
 
-    MussetaTestingRunner testRunner = (MussetaTestingRunner) InstrumentationRegistry.getInstrumentation();
-    testRunner.addHooks((activity, bundle) -> {
+    MussetaTestingRunner.get().addHooks((activity, bundle) -> {
       HackerNewsActivity hackerNewsActivity = (HackerNewsActivity) activity;
       HackerNewsTestingComponent hackerNewsTestingComponent = MussetaTesting.get(activity).getMussetaTestingComponent()
           .plus(new HackerNewsModule(hackerNewsActivity) {
@@ -89,21 +98,15 @@ public class HackerNewsActivityTest {
       hackerNewsTestingComponent.injectTesting(HackerNewsActivityTest.this);
       hackerNewsActivity.setActivityComponent(hackerNewsTestingComponent);
     });
-
-    // launch it, boom!
-    rule.launchActivity(null);
-
-    // By default Espresso Intents does not stub any Intents. Stubbing needs to be setup before
-    // every test run. In this case all external Intents will be blocked.
-    intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
   }
 
   @After public void tearDown() throws Exception {
-    MussetaTestingRunner testRunner = (MussetaTestingRunner) InstrumentationRegistry.getInstrumentation();
-    testRunner.removeHooks();
+    MussetaTestingRunner.get().removeHooks();
+    MussetaTesting.get(InstrumentationRegistry.getTargetContext()).restoreDefaulMussetaComponent();
   }
 
   @Test public void testStartup() throws Exception {
+    rule.launchActivity(null);
     // since espresso will wait util ui thread is idle,
     // so the first time espresso attach it, the items loading is done.
     onView(withId(android.R.id.progress)).check(matches(not(isDisplayed())));
@@ -111,6 +114,8 @@ public class HackerNewsActivityTest {
   }
 
   @Test public void testDoubleTapToTop() throws Exception {
+    rule.launchActivity(null);
+
     onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.scrollToPosition(testingItems.size() - 1));
     // che the first one is not displayed
     onView(withText(testingItems.get(0).title)).check(doesNotExist());
@@ -122,9 +127,14 @@ public class HackerNewsActivityTest {
   }
 
   @Test public void testTapItem() throws Exception {
+    rule.launchActivity(null);
+    intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
+
     int position = (int) (Math.random() * testingItems.size());
 
-    onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
+    onView(withId(R.id.recycler_view))
+        .perform(ViewActions.closeSoftKeyboard())
+        .perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
 
     intended(allOf(
         hasAction(Intent.ACTION_VIEW),
@@ -133,19 +143,67 @@ public class HackerNewsActivityTest {
   }
 
   @Test public void testLongTapItem() throws Exception {
+    rule.launchActivity(null);
+    intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
+
     int position = (int) (Math.random() * testingItems.size());
     String targetTitle = testingItems.get(position).title;
 
-    onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(position, longClick()));
+    Espresso.closeSoftKeyboard();
+    TimeUnit.SECONDS.sleep(1);
 
-    intended(allOf(
-        hasAction(Intent.ACTION_SEND),
-        hasExtra(Intent.EXTRA_TITLE, targetTitle),
-        hasType(rule.getActivity().getString(R.string.mime_text_plain))
-    ));
+    try {
+      onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(position, longClick()));
+
+      intended(allOf(
+          hasAction(Intent.ACTION_SEND),
+          hasExtra(Intent.EXTRA_TITLE, targetTitle),
+          hasType(rule.getActivity().getString(R.string.mime_text_plain))
+      ));
+    } catch (Exception ex) {
+      // TODO: 11/15/15 wait AOSP to fix it
+      Timber.wtf(ex, "should not happen Injecting to another application requires INJECT_EVENTS permission");
+    }
   }
 
-  public final class SessionIdentifierGenerator {
+  @Test public void testNoNetwork() throws Exception {
+    // before the activity launching, replace the app component
+    MussetaTesting mussetaTesting = MussetaTesting.get(InstrumentationRegistry.getTargetContext());
+    mussetaTesting.setTestingMussetaComponent(
+        DaggerMussetaTestingComponent.builder()
+            .applicationModule(new MussetaModules.ApplicationModule(mussetaTesting))
+            .networkModule(new MussetaModules.NetworkModule() {
+              @Override protected NetworkWatcher providesNetworkWatcher(Application application) {
+                return networkWatcher;
+              }
+            })
+            .build()
+    );
+
+    when(networkWatcher.hasNetwork()).thenReturn(false);
+
+    // after the activity launching, the replaced network watcher should be the mocked one
+    rule.launchActivity(null);
+
+    // no connection
+    onView(withText(R.string.network_problem)).check(matches(isDisplayed()));
+  }
+
+  @Test public void testRetry() throws Exception {
+    // keep the scene
+    testNoNetwork();
+
+//    reset(networkWatcher); // no need to reset
+    when(networkWatcher.hasNetwork()).thenReturn(true);
+
+//    TimeUnit.SECONDS.sleep(1); // NOTE: sometimes seconds is enough to sync the snackbar item to > 90% visibility
+
+    onView(withText(R.string.retry)).perform(click()).check(doesNotExist());
+
+    assertThat(rule.getActivity().layoutManager.getItemCount(), Matchers.greaterThan(0));
+  }
+
+  public static final class SessionIdentifierGenerator {
     private SecureRandom random = new SecureRandom();
 
     public String nextSessionId() {
