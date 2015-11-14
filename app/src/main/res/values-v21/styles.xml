@@ -4,6 +4,6 @@
     </style>
 
     <style name="AppTheme.NavBar">
-        <item name="android:navigationBarColor">@color/material_grey_700</item>
+        <!--<item name="android:navigationBarColor">@color/material_grey_700</item>-->
     </style>
 </resources>
