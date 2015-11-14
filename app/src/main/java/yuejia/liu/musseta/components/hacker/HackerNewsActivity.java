@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
@@ -35,6 +36,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
+import retrofit.RetrofitError;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 import yuejia.liu.musseta.Musseta;
@@ -52,9 +54,10 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
   private static final String KEY_PREVIOUS_POSITION = "key_previous_position";
   private static final String KEY_HACKER_NEWS_ITEMS = "key_hacker_news_items";
 
+  @HackerNews
+  @Inject CompositeSubscription subscriptions;
   @Inject HackerNewsPresenter   presenter;
   @Inject ResourceManager       resourceManager;
-  @Inject CompositeSubscription subscriptions;
 
   @Bind(R.id.toolbar)          Toolbar            toolbar;
   @Bind(android.R.id.progress) ProgressBar        progress;
@@ -147,7 +150,8 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
         return makeMovementFlags(0, swipeFlags);
       }
 
-      @Override public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+      @Override
+      public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
         return false;
       }
 
@@ -160,7 +164,8 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
         return true;
       }
 
-      @Override public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+      @Override
+      public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         ViewCompat.setAlpha(viewHolder.itemView, 1 - Math.abs(dX) * 2 / viewHolder.itemView.getWidth());
       }
@@ -183,6 +188,14 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
     if (refreshLayout.isRefreshing() != refreshing) {
       refreshLayout.setRefreshing(refreshing);
     }
+  }
+
+  void onNetworkError(RetrofitError error) {
+    Snackbar.make(recyclerView, error == null ? getString(R.string.network_problem) : error.getMessage(), Snackbar.LENGTH_INDEFINITE)
+        .setAction(R.string.retry, v -> {
+          presenter.present();
+        })
+        .show();
   }
 
   void showLoading(boolean loading) {
@@ -278,7 +291,7 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
       Intent intent = new Intent(Intent.ACTION_SEND);
       intent.setType(context.getString(R.string.mime_text_plain));
       intent.putExtra(Intent.EXTRA_TITLE, item.title);
-      intent.putExtra(Intent.EXTRA_TEXT, String.format("[%s] %s from Hacker News", item.title, item.url));
+      intent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.hacker_news_share_content, item.title, item.url));
       context.startActivity(intent);
       return true;
     }

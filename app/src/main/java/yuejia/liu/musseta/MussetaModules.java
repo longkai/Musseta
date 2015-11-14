@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso;
 import dagger.Module;
 import dagger.Provides;
 import timber.log.Timber;
+import yuejia.liu.musseta.misc.NetworkWatcher;
 
 /**
  * Application scope modules.
@@ -51,6 +52,10 @@ public class MussetaModules {
           .loggingEnabled(BuildConfig.DEBUG)
           .indicatorsEnabled(BuildConfig.DEBUG)
           .build();
+    }
+
+    @Provides @Singleton NetworkWatcher providesNetworkWatcher(Application application) {
+      return new NetworkWatcher(application);
     }
   }
 

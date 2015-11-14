@@ -10,6 +10,7 @@ import retrofit.converter.GsonConverter;
 import rx.subscriptions.CompositeSubscription;
 import yuejia.liu.musseta.BuildConfig;
 import yuejia.liu.musseta.components.ActivityScope;
+import yuejia.liu.musseta.misc.NetworkWatcher;
 import yuejia.liu.musseta.ui.ResourceManager;
 
 /**
@@ -36,13 +37,13 @@ public class HackerNewsModule {
     return restAdapter.create(HackerNewsApi.class);
   }
 
-  @Provides @ActivityScope public CompositeSubscription providesSubscriptions() {
+  @Provides @ActivityScope @HackerNews public CompositeSubscription providesSubscriptions() {
     return new CompositeSubscription();
   }
 
   @Provides @ActivityScope
-  public HackerNewsPresenter providesHackerNewsPresenter(HackerNewsApi api, CompositeSubscription subscriptions) {
-    return new HackerNewsPresenter(activity, api, subscriptions);
+  public HackerNewsPresenter providesHackerNewsPresenter(NetworkWatcher networkWatcher, HackerNewsApi api, @HackerNews CompositeSubscription subscriptions) {
+    return new HackerNewsPresenter(activity, api, subscriptions, networkWatcher);
   }
 
   @Provides @ActivityScope public ResourceManager providesResourceManager() {
