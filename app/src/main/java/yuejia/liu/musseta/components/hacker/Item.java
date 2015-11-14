@@ -20,6 +20,7 @@ public class Item implements Parcelable {
   public int     score;
   public String  title;
   public long[]  parts;
+  public int     descendants;
 
   public Item() {}
 
@@ -37,6 +38,7 @@ public class Item implements Parcelable {
     score = builder.score;
     title = builder.title;
     parts = builder.parts;
+    descendants = builder.descendants;
   }
 
   @Override public int describeContents() { return 0; }
@@ -55,6 +57,7 @@ public class Item implements Parcelable {
     dest.writeInt(this.score);
     dest.writeString(this.title);
     dest.writeLongArray(this.parts);
+    dest.writeInt(this.descendants);
   }
 
   private Item(Parcel in) {
@@ -71,6 +74,7 @@ public class Item implements Parcelable {
     this.score = in.readInt();
     this.title = in.readString();
     this.parts = in.createLongArray();
+    this.descendants = in.readInt();
   }
 
   public static final Creator<Item> CREATOR = new Creator<Item>() {
@@ -93,6 +97,7 @@ public class Item implements Parcelable {
     private int score;
     private String title;
     private long[] parts;
+    private int descendants;
 
     public Builder() {}
 
@@ -158,6 +163,11 @@ public class Item implements Parcelable {
 
     public Builder parts(long[] val) {
       parts = val;
+      return this;
+    }
+
+    public Builder descendants(int val) {
+      descendants = val;
       return this;
     }
 

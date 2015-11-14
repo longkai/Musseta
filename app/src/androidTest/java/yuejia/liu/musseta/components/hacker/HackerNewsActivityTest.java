@@ -12,12 +12,16 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.view.View;
 
+import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
@@ -49,6 +53,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasDat
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasType;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -201,6 +206,32 @@ public class HackerNewsActivityTest {
     onView(withText(R.string.retry)).perform(click()).check(doesNotExist());
 
     assertThat(rule.getActivity().layoutManager.getItemCount(), Matchers.greaterThan(0));
+  }
+
+  @Test public void testClickReplyCounting() throws Exception {
+    rule.launchActivity(null);
+    intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
+
+    final int testingPosition = 7;
+
+    onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(testingPosition, new ViewAction() {
+      @Override public Matcher<View> getConstraints() {
+        return null;
+      }
+
+      @Override public String getDescription() {
+        return "click recycler view' s child";
+      }
+
+      @Override public void perform(UiController uiController, View view) {
+        view.findViewById(R.id.reply_counting).performClick();
+      }
+    }));
+
+    intended(allOf(
+        hasAction(Intent.ACTION_VIEW),
+        hasData("https://news.ycombinator.com/item?id=" + testingItems.get(testingPosition).id)
+    ));
   }
 
   public static final class SessionIdentifierGenerator {

@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import javax.inject.Inject;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -186,7 +187,7 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
     toolbar.setOnTouchListener((v, event) -> detectorCompat.onTouchEvent(event));
   }
 
-  private void setupRecyclerScrolling() {
+  @TargetApi(Build.VERSION_CODES.HONEYCOMB) private void setupRecyclerScrolling() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
       recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
         @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -250,6 +251,8 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
 
       holder.subTitle.setText(context.getString(
           R.string.hacker_news_item_subtitle, item.score, item.by, DateUtils.getRelativeTimeSpanString(item.time)));
+
+      holder.countingView.setCounting(item.descendants);
     }
 
     public void append(Item item) {
@@ -292,15 +295,24 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
   }
 
   static class HackerNewsViewHolder extends RecyclerView.ViewHolder {
-    @Bind(android.R.id.title) TextView title;
-    @Bind(android.R.id.text1) TextView subTitle;
+    @Bind(android.R.id.title)  TextView          title;
+    @Bind(android.R.id.text1)  TextView          subTitle;
+    @Bind(R.id.reply_counting) ReplyCountingView countingView;
 
-    @OnClick(R.id.rootView) void onItemClick(View view) {
-      Item item = (Item) view.getTag();
-      view.getContext().startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(item.url)));
+    @OnClick({R.id.root_view, R.id.reply_counting}) void onItemClick(View view) {
+      Item item = (Item) itemView.getTag();
+      Context context = view.getContext();
+      switch (view.getId()) {
+        case R.id.root_view:
+          context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(item.url)));
+          break;
+        case R.id.reply_counting:
+          context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://news.ycombinator.com/item?id=" + item.id)));
+          break;
+      }
     }
 
-    @OnLongClick(R.id.rootView) boolean onItemLongClick(View view) {
+    @OnLongClick(R.id.root_view) boolean onItemLongClick(View view) {
       Item item = (Item) view.getTag();
       final Context context = view.getContext();
       Intent intent = new Intent(Intent.ACTION_SEND);

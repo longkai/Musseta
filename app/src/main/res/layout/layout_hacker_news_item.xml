@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootView"
+    android:id="@+id/root_view"
     android:orientation="vertical"
     android:background="?attr/selectableItemBackground"
     android:padding="8dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+  <yuejia.liu.musseta.components.hacker.ReplyCountingView
+      android:id="@+id/reply_counting"
+      android:background="?attr/selectableItemBackgroundBorderless"
+      android:padding="8dp"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
   <TextView
       android:id="@android:id/title"
+      android:layout_toLeftOf="@id/reply_counting"
+      android:layout_marginRight="8dp"
       android:textAppearance="?attr/textAppearanceListItem"
       tools:text="This is the title1"
       android:layout_width="match_parent"
@@ -19,8 +30,9 @@
   <TextView
       android:id="@android:id/text1"
       android:layout_marginTop="8dp"
+      android:layout_below="@android:id/title"
       android:textColor="@color/material_grey_700"
       tools:text="This is the sub title!"
       android:layout_width="match_parent"
       android:layout_height="wrap_content" />
-</LinearLayout>
+</RelativeLayout>
