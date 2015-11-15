@@ -5,12 +5,10 @@ import java.util.Collections;
 
 import javax.inject.Inject;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -143,8 +141,6 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
 
     hackerNewsAdapter = new HackerNewsAdapter();
     recyclerView.setAdapter(hackerNewsAdapter);
-
-    setupRecyclerScrolling();
   }
 
   private ItemTouchHelper setupItemTouchHelper() {
@@ -185,18 +181,6 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
       }
     });
     toolbar.setOnTouchListener((v, event) -> detectorCompat.onTouchEvent(event));
-  }
-
-  @TargetApi(Build.VERSION_CODES.HONEYCOMB) private void setupRecyclerScrolling() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-      recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-        @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-          super.onScrolled(recyclerView, dx, dy);
-          boolean dim = layoutManager.findFirstCompletelyVisibleItemPosition() > 10;
-          getWindow().getDecorView().setSystemUiVisibility(dim ? View.SYSTEM_UI_FLAG_LOW_PROFILE : 0);
-        }
-      });
-    }
   }
 
   // presenter method

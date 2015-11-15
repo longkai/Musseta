@@ -71,8 +71,8 @@ public class ReplyCountingView extends View {
     int x = (getWidth() - rect.width()) >> 1;
     int y = (getHeight() - rect.height()) >> 1;
 
-    // assume the array take up 18% of the outline...
-    canvas.drawText(text, 0, text.length(), x, getTextYBaseLine(paint, rect) + y - replayOutlineIntrinsicHeight * .18f, paint);
+    // assume the array take up 15% of the outline...
+    canvas.drawText(text, 0, text.length(), x, getTextYBaseLine(paint, rect) + y - replayOutlineIntrinsicHeight * .15f, paint);
 
     canvas.restore();
   }
