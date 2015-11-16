@@ -51,6 +51,19 @@ android {
     targetCompatibility JavaVersion.VERSION_1_8
   }
 
+  signingConfigs {
+    release {
+      try {
+        storeFile file(STORE_FILE)
+        storePassword STORE_PASSWORD
+        keyAlias KEY_ALIAS
+        keyPassword KEY_PASSWORD
+      } catch (ex) {
+        throw new InvalidUserDataException("You should define KEYSTORE_PASSWORD and KEY_PASSWORD in gradle.properties.")
+      }
+    }
+  }
+
   buildTypes {
     debug {
       testCoverageEnabled = true
@@ -59,6 +72,7 @@ android {
 //      testProguardFile 'proguard-test-rules.pro'
     }
     release {
+      signingConfig signingConfigs.release
       minifyEnabled true
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
@@ -95,8 +109,13 @@ android {
     musseta {
       applicationId android.defaultConfig.applicationId
       manifestPlaceholders = ["channel": "musseta"]
-      ext.enableCrashlytics = false
-      manifestPlaceholders = ["crashlytics": ""] // todo: provides your own key!
+
+      try {
+        ext.enableCrashlytics = ENABLE_CRASHLYTICS.toBoolean()
+        manifestPlaceholders = ["crashlytics": CRASHLYTICS_KEY]
+      } catch (ex) {
+        throw new InvalidUserDataException("You should define ENABLE_CRASHLYTICS and CRASHLYTICS_KEY in gradle.properties.")
+      }
     }
   }
 }
