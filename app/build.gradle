@@ -38,6 +38,8 @@ android {
     versionCode 1
     versionName "1.0"
 
+    manifestPlaceholders = ["channel": "dev"] // default to dev chanel
+
     testInstrumentationRunner 'yuejia.liu.musseta.MussetaTestingRunner'
 
     testInstrumentationRunnerArguments disableAnalytics: 'true'
@@ -52,9 +54,12 @@ android {
   buildTypes {
     debug {
       testCoverageEnabled = true
+      minifyEnabled true
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//      testProguardFile 'proguard-test-rules.pro'
     }
     release {
-      minifyEnabled false
+      minifyEnabled true
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }
@@ -73,11 +78,25 @@ android {
 
   packagingOptions {
     exclude 'META-INF/services/javax.annotation.processing.Processor'
+    exclude 'LICENSE.txt'
   }
 
   productFlavors {
+    alpha {
+      applicationId android.defaultConfig.applicationId + '.alpha'
+      ext.enableCrashlytics = false
+      manifestPlaceholders = ["crashlytics": "provide your own crashlytics if you need in alpha flavor!"]
+    }
+    beta {
+      applicationId android.defaultConfig.applicationId + '.beta'
+      ext.enableCrashlytics = false
+      manifestPlaceholders = ["crashlytics": "provide your own crashlytics if you need in beta flavor!"]
+    }
     musseta {
+      applicationId android.defaultConfig.applicationId
       manifestPlaceholders = ["channel": "musseta"]
+      ext.enableCrashlytics = false
+      manifestPlaceholders = ["crashlytics": ""] // todo: provides your own key!
     }
   }
 }

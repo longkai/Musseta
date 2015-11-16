@@ -10,3 +10,6 @@ crashlytics-build.properties
 
 *.iml
 .DS_Store
+
+*.apk
+gradle.properties

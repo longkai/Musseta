@@ -39,7 +39,7 @@ ext {
       palette       : '1.0',
       supportLibrary: '23.1.1',
       rxandroid     : '1.0.1',
-      rxjava        : '1.0.14',
+      rxjava        : '1.0.16',
       butterKnife   : '7.0.1',
       timber        : '3.1.0',
       picasso       : '2.5.2',
