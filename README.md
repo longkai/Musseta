@@ -1,43 +1,35 @@
 Musseta
 ===
-[![Build Status](https://travis-ci.org/longkai/Musseta.svg?branch=dev)](https://travis-ci.org/longkai/Musseta)
+[![Build Status](https://travis-ci.org/longkai/Musseta.svg?branch=master)][CI] [![Download](https://api.bintray.com/packages/longkai/dl/Musseta/images/download.svg)](https://bintray.com/longkai/dl/Musseta/_latestVersion)
 
-### A nice way to write an Android app :smiley:
-Currently, it simply fetches the top stories form **Hacker News** with its official API.
+### A place to explore and learn
+![Banner](art/banner.jpg)
+
+The app focus on architect and testing.
+
+Currently, it simply fetches the top stories form **Hacker News** with its official API. It' s under heavily development and more features is on the way :)
 
 It may be changed at anytime with any nice idea :punch:
 
-Docs will come soon :relaxed:
+### Screenshot
+![Screenshot](art/screenshot.jpg)
 
-Thanks for starring or participating :innocent:
+### Note
+For some reason(especially the emulator), the [travis-ci][CI] might build failed. However, each commit has been passed locally.
 
-__NOTE: THIS IS STILL IN THE EXPERIMENT PROCESS :grey_exclamation:__
+### TODO
+A series of articles which describe how the app architecting and testing.
 
-![Screenshot](art/snapshot.png)
-
-### Requirement
-1. JDK 7+
-2. Android Studio(1.0+)
-3. Android SDK API level >= 21(Lollipop)
-
-### How to build
-1. Checkout the source code
-2. Import into Android Studio
-3. Run app.
-
-Or, you could use gradle commandline, the apk will output in ``app/build/outputs/apk/``
-
-```sh
-# if you want to sign the app, use your own signing config with assembleRelease command!
-# path/to/Musseta/app
-$ ../gradlew clean assembleDebug
-```
+### Thanks
+Many thanks to the community and some of my friends who support the project. It cannot build without you, thx!
 
 ### License
 ```
 The MIT License (MIT)
 
-Copyright (c) 2014 HeisenbergLab
+Copyright (c) 2015 longkai, HeisenbergLab
 
 The software shall be used for good, not evil.
 ```
+
+[CI]: https://travis-ci.org/longkai/Musseta
