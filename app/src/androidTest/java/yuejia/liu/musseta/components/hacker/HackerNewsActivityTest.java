@@ -191,6 +191,7 @@ public class HackerNewsActivityTest {
     rule.launchActivity(null);
 
     // no connection
+    TimeUnit.SECONDS.sleep(1); // hands on... not that quickly...
     onView(withText(R.string.network_problem)).check(matches(isDisplayed()));
   }
 

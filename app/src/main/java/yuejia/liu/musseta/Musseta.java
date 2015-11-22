@@ -22,7 +22,6 @@ public class Musseta extends Application {
     if (BuildConfig.DEBUG) {
       Timber.plant(new Timber.DebugTree());
     } else {
-      // TODO: 11/9/15 separate test and production code
       Timber.plant(new Timber.Tree() {
         @Override protected void log(int priority, String tag, String message, Throwable t) {
           if (priority == Log.WARN) {

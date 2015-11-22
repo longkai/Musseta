@@ -13,3 +13,4 @@ crashlytics-build.properties
 
 *.apk
 gradle.properties
+fabric.properties

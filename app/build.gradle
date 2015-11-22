@@ -18,6 +18,8 @@ repositories {
   maven { url rootProject.ext.repositories.fabric }
 }
 
+// NOTE: if you want to enable fabric facilities, please provide your own `fabric.properties` file, plz refer fabric doc
+def enableFabric = file("${projectDir}/fabric.properties").exists()
 def isCi = "true".equals(System.getenv("CI"))
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
@@ -68,12 +70,14 @@ android {
     debug {
       testCoverageEnabled = true
       minifyEnabled true
+      ext.enableCrashlytics = false // disable fabric in any debug build
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//      testProguardFile 'proguard-test-rules.pro'
+      testProguardFile 'proguard-test-rules.pro'
     }
     release {
       signingConfig signingConfigs.release
       minifyEnabled true
+      ext.enableCrashlytics = enableFabric
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }
@@ -98,24 +102,13 @@ android {
   productFlavors {
     alpha {
       applicationId android.defaultConfig.applicationId + '.alpha'
-      ext.enableCrashlytics = false
-      manifestPlaceholders = ["crashlytics": "provide your own crashlytics if you need in alpha flavor!"]
     }
     beta {
       applicationId android.defaultConfig.applicationId + '.beta'
-      ext.enableCrashlytics = false
-      manifestPlaceholders = ["crashlytics": "provide your own crashlytics if you need in beta flavor!"]
     }
     musseta {
       applicationId android.defaultConfig.applicationId
       manifestPlaceholders = ["channel": "musseta"]
-
-      try {
-        ext.enableCrashlytics = ENABLE_CRASHLYTICS.toBoolean()
-        manifestPlaceholders = ["crashlytics": CRASHLYTICS_KEY]
-      } catch (ex) {
-        throw new InvalidUserDataException("You should define ENABLE_CRASHLYTICS and CRASHLYTICS_KEY in gradle.properties.")
-      }
     }
   }
 }

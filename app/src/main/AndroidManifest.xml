@@ -25,7 +25,5 @@
     <meta-data
         android:name="channel"
         android:value="${channel}" />
-
-    <meta-data android:name="com.crashlytics.ApiKey" android:value="${crashlytics}"/>
   </application>
 </manifest>
