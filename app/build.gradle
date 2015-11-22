@@ -18,6 +18,8 @@ repositories {
   maven { url rootProject.ext.repositories.fabric }
 }
 
+// NOTE: you need provide you own signing configs in `gradle.properties`
+def enableSigning = file("${rootDir}/gradle.properties").exists()
 // NOTE: if you want to enable fabric facilities, please provide your own `fabric.properties` file, plz refer fabric doc
 def enableFabric = file("${projectDir}/fabric.properties").exists()
 def isCi = "true".equals(System.getenv("CI"))
@@ -61,13 +63,16 @@ android {
         keyAlias KEY_ALIAS
         keyPassword KEY_PASSWORD
       } catch (ex) {
-        throw new InvalidUserDataException("You should define KEYSTORE_PASSWORD and KEY_PASSWORD in gradle.properties.")
+        if (enableSigning) {
+          throw new InvalidUserDataException("You should define STORE_FILE, KEYSTORE_PASSWORD, KEY_ALIAS and KEY_PASSWORD in gradle.properties.")
+        }
       }
     }
   }
 
   buildTypes {
     debug {
+      applicationIdSuffix ".debug"
       testCoverageEnabled = true
       minifyEnabled true
       ext.enableCrashlytics = false // disable fabric in any debug build
@@ -75,7 +80,10 @@ android {
       testProguardFile 'proguard-test-rules.pro'
     }
     release {
-      signingConfig signingConfigs.release
+      if (enableSigning) {
+        signingConfig signingConfigs.release
+      }
+
       minifyEnabled true
       ext.enableCrashlytics = enableFabric
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
