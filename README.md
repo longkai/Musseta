@@ -1,6 +1,8 @@
 Musseta
 ===
-[![Build Status](https://travis-ci.org/longkai/Musseta.svg?branch=master)][CI] [![Download](https://api.bintray.com/packages/longkai/dl/Musseta/images/download.svg)](https://bintray.com/longkai/dl/Musseta/_latestVersion)
+[![Build Status][CI-badge]][CI-url] [![Download][dl-badge]][dl-url]
+
+[<img width=190 alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png' />][Google Play]
 
 ### A place to explore and learn
 ![Banner](art/banner.jpg)
@@ -32,4 +34,11 @@ Copyright (c) 2015 longkai, HeisenbergLab
 The software shall be used for good, not evil.
 ```
 
-[CI]: https://travis-ci.org/longkai/Musseta
+### Legal attribution
+* Android, Google Play and the Google Play logo are trademarks of Google Inc.
+
+[CI-badge]: https://travis-ci.org/longkai/Musseta.svg?branch=master
+[CI-url]: https://travis-ci.org/longkai/Musseta
+[dl-badge]: https://api.bintray.com/packages/longkai/dl/Musseta/images/download.svg
+[dl-url]: https://bintray.com/longkai/dl/Musseta/_latestVersion
+[Google Play]: https://play.google.com/store/apps/details?id=yuejia.liu.musseta&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1 'Get it on Google Play'
