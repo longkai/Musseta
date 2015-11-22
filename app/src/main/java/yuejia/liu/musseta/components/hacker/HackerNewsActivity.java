@@ -173,6 +173,7 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
   }
 
   private void setupToolbar() {
+    toolbar.setTitle(R.string.hacker_news);
     setSupportActionBar(toolbar);
     final GestureDetectorCompat detectorCompat = new GestureDetectorCompat(this, new GestureDetector.SimpleOnGestureListener() {
       @Override public boolean onDoubleTap(MotionEvent e) {

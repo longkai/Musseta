@@ -14,7 +14,6 @@
       android:theme="@style/Musseta">
 
     <activity
-        android:label="@string/hacker_news"
         android:name=".components.hacker.HackerNewsActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
