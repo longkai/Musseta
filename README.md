@@ -17,7 +17,7 @@ It may be changed at anytime with any nice idea :punch:
 ![Screenshot](art/screenshot.jpg)
 
 ### Note
-For some reason(especially the emulator), the [travis-ci][CI] might build failed. However, each commit has been passed locally.
+For some reason(especially the emulator), the [travis-ci][CI-url] might build failed. However, each commit has been passed locally.
 
 ### TODO
 A series of articles which describe how the app architecting and testing.
