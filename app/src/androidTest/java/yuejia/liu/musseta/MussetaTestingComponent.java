@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 import yuejia.liu.musseta.components.hacker.HackerNewsModule;
 import yuejia.liu.musseta.components.hacker.HackerNewsTestingComponent;
+import yuejia.liu.musseta.components.settings.SettingsTestingComponent;
 
 /**
  * Copy from production code to add more sub-component.
@@ -18,5 +19,7 @@ import yuejia.liu.musseta.components.hacker.HackerNewsTestingComponent;
     MussetaModules.ApplicationModule.class
 })
 public interface MussetaTestingComponent extends MussetaComponent {
+  SettingsTestingComponent plus();
+
   HackerNewsTestingComponent plus(HackerNewsModule module);
 }

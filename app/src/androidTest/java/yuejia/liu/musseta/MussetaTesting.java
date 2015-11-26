@@ -31,7 +31,7 @@ public class MussetaTesting extends Musseta {
     return (MussetaTestingComponent) applicationComponent;
   }
 
-  public void restoreDefaulMussetaComponent() {
+  public void restoreDefaultMussetaComponent() {
     applicationComponent = applicationComponentCopy;
   }
 }

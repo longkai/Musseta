@@ -79,6 +79,7 @@ ext {
       design         : "com.android.support:design:$versions.supportLibrary",
       cardview       : "com.android.support:cardview-v7:$versions.supportLibrary",
       recyclerview   : "com.android.support:recyclerview-v7:$versions.supportLibrary",
+      preference     : "com.android.support:preference-v7:$versions.supportLibrary",
       timber         : "com.jakewharton.timber:timber:$versions.timber",
       picasso        : "com.squareup.picasso:picasso:$versions.picasso",
       retrofit       : "com.squareup.retrofit:retrofit:$versions.retrofit",

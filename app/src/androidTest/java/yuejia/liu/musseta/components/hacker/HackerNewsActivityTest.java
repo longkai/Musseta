@@ -38,9 +38,11 @@ import yuejia.liu.musseta.MussetaModules;
 import yuejia.liu.musseta.MussetaTesting;
 import yuejia.liu.musseta.MussetaTestingRunner;
 import yuejia.liu.musseta.R;
+import yuejia.liu.musseta.components.settings.SettingsActivity;
 import yuejia.liu.musseta.misc.NetworkWatcher;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.doubleClick;
 import static android.support.test.espresso.action.ViewActions.longClick;
@@ -49,11 +51,12 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasType;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
-import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -107,7 +110,7 @@ public class HackerNewsActivityTest {
 
   @After public void tearDown() throws Exception {
     MussetaTestingRunner.get().removeHooks();
-    MussetaTesting.get(InstrumentationRegistry.getTargetContext()).restoreDefaulMussetaComponent();
+    MussetaTesting.get(InstrumentationRegistry.getTargetContext()).restoreDefaultMussetaComponent();
   }
 
   @Test public void testStartup() throws Exception {
@@ -232,6 +235,21 @@ public class HackerNewsActivityTest {
     intended(allOf(
         hasAction(Intent.ACTION_VIEW),
         hasData("https://news.ycombinator.com/item?id=" + testingItems.get(testingPosition).id)
+    ));
+  }
+
+  @Test public void testOpenSettingsUI() throws Exception {
+    HackerNewsActivity activity = rule.launchActivity(null);
+
+    intending(isInternal()).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
+
+    openActionBarOverflowOrOptionsMenu(activity);
+
+    onView(withText(R.string.settings)).perform(click());
+
+    intended(allOf(
+        toPackage(activity.getPackageName()),
+        hasComponent(SettingsActivity.class.getName())
     ));
   }
 

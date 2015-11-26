@@ -40,7 +40,8 @@ public class MussetaModules {
     @Provides @Singleton protected GoogleAnalytics providesGoogleAnalytics(SharedPreferences sharedPreferences) {
       GoogleAnalytics analytics = GoogleAnalytics.getInstance(application);
       analytics.setDryRun(BuildConfig.DEBUG); // when debug, disable tracking
-      analytics.setAppOptOut(sharedPreferences.getBoolean(application.getString(R.string.pref_enable_tracking), false));
+      analytics.setAppOptOut(sharedPreferences.getBoolean(application.getString(R.string.settings_key_enable_tracking),
+          application.getResources().getBoolean(R.bool.settings_def_enable_tracking)));
       return analytics;
     }
 

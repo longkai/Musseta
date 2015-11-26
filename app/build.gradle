@@ -75,7 +75,7 @@ android {
   buildTypes {
     debug {
       applicationIdSuffix ".debug"
-//      testCoverageEnabled = true todo: seems upgrade to AS 2.0 preview, it sucks, make it work when is fixed.
+//      testCoverageEnabled = true // todo: seems upgrade to AS 2.0 preview, it sucks, make it work when is fixed.
       minifyEnabled true
       ext.enableCrashlytics = false // disable fabric in any debug build
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -136,10 +136,10 @@ dependencies {
   compile rootProject.ext.dependencies.rxandroid
   compile rootProject.ext.dependencies.rxjava
 
-  compile rootProject.ext.dependencies.cardview
   compile rootProject.ext.dependencies.appcompat
   compile rootProject.ext.dependencies.design
   compile rootProject.ext.dependencies.recyclerview
+  compile rootProject.ext.dependencies.preference
 
   compile rootProject.ext.dependencies.butterKnife
   compile rootProject.ext.dependencies.timber

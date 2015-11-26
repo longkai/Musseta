@@ -21,6 +21,10 @@
       </intent-filter>
     </activity>
 
+    <activity
+        android:label="@string/settings"
+        android:name=".components.settings.SettingsActivity" />
+
     <meta-data
         android:name="channel"
         android:value="${channel}" />

@@ -10,7 +10,4 @@
   <string name="hacker_news_share_content">%1$s %2$s from Hacker News</string>
   <string name="network_problem">Network problem...</string>
   <string name="retry">Retry</string>
-
-  <!--maybe keep it another place-->
-  <string name="pref_enable_tracking">pref_enable_tracking</string>
 </resources>

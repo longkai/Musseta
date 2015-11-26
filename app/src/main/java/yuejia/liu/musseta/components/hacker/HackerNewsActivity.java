@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +27,8 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +46,7 @@ import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 import yuejia.liu.musseta.Musseta;
 import yuejia.liu.musseta.R;
+import yuejia.liu.musseta.components.settings.SettingsActivity;
 import yuejia.liu.musseta.ui.ItemTouchHelperAdapter;
 import yuejia.liu.musseta.ui.MussetaActivity;
 import yuejia.liu.musseta.ui.ResourceManager;
@@ -98,6 +102,21 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
 
   @Override protected HackerNewsComponent setupActivityComponent() {
     return Musseta.get(this).getMussetaComponent().plus(new HackerNewsModule(this));
+  }
+
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.main, menu);
+    return true;
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.action_settings:
+        startActivity(new Intent(this, SettingsActivity.class));
+        return true;
+      default:
+        return super.onOptionsItemSelected(item);
+    }
   }
 
   @Override protected void onSaveInstanceState(Bundle outState) {
