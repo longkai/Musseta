@@ -7,12 +7,14 @@ buildscript {
     classpath rootProject.ext.dependencies.retrolambda
     classpath rootProject.ext.dependencies.apt
     classpath rootProject.ext.dependencies.fabric
+    classpath rootProject.ext.dependencies.googleServices
   }
 }
 apply plugin: rootProject.ext.plugins.android
 apply plugin: rootProject.ext.plugins.retrolambda
 apply plugin: rootProject.ext.plugins.apt
 apply plugin: rootProject.ext.plugins.fabric
+apply plugin: rootProject.ext.plugins.googleServices
 
 repositories {
   maven { url rootProject.ext.repositories.fabric }
@@ -73,7 +75,7 @@ android {
   buildTypes {
     debug {
       applicationIdSuffix ".debug"
-      testCoverageEnabled = true
+//      testCoverageEnabled = true todo: seems upgrade to AS 2.0 preview, it sucks, make it work when is fixed.
       minifyEnabled true
       ext.enableCrashlytics = false // disable fabric in any debug build
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -151,6 +153,7 @@ dependencies {
   compile(rootProject.ext.dependencies.crashlytics) {
     transitive = true;
   }
+  compile rootProject.ext.dependencies.analytics
 
   // testing
   androidTestCompile rootProject.ext.dependencies.mockito

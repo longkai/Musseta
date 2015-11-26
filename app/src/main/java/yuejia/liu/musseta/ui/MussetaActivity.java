@@ -1,9 +1,12 @@
 package yuejia.liu.musseta.ui;
 
+import javax.inject.Inject;
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
 import yuejia.liu.musseta.components.ActivityComponent;
 
 /**
@@ -11,6 +14,8 @@ import yuejia.liu.musseta.components.ActivityComponent;
  */
 public abstract class MussetaActivity<T extends ActivityComponent> extends AppCompatActivity {
   protected T activityComponent;
+
+  @Inject GoogleAnalytics googleAnalytics;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -20,6 +25,16 @@ public abstract class MussetaActivity<T extends ActivityComponent> extends AppCo
     if (activityComponent != null) {
       activityComponent.inject(this);
     }
+  }
+
+  @Override protected void onStart() {
+    super.onStart();
+    googleAnalytics.reportActivityStart(this);
+  }
+
+  @Override protected void onStop() {
+    googleAnalytics.reportActivityStop(this);
+    super.onStop();
   }
 
   @Override protected void onDestroy() {

@@ -21,10 +21,11 @@ subprojects {
 ext {
   versions = [
       // plugins
-      android       : '1.3.1',
+      android       : '1.5.0',
       fabric        : '1.+',
       apt           : '1.8',
       retrolambda   : '3.2.3',
+      googleServices: '1.5.0',
       // build config
       compileSdk    : 23,
       targetSdk     : 23,
@@ -48,6 +49,7 @@ ext {
       dagger        : '2.0.2',
       javax         : '10.0-b28',
       crashlytics   : '2.5.2',
+      analytics     : '8.3.0',
   ]
 
   dependencies = [
@@ -56,6 +58,7 @@ ext {
       fabric         : "io.fabric.tools:gradle:$versions.fabric",
       apt            : "com.neenbedankt.gradle.plugins:android-apt:$versions.apt",
       retrolambda    : "me.tatarka:gradle-retrolambda:$versions.retrolambda",
+      googleServices : "com.google.gms:google-services:$versions.googleServices",
       // testing
       mockito        : "org.mockito:mockito-core:$versions.mockito",
       dexmaker       : "com.google.dexmaker:dexmaker:$versions.dexmaker",
@@ -84,14 +87,16 @@ ext {
       daggerCompiler : "com.google.dagger:dagger-compiler:$versions.dagger",
       javax          : "org.glassfish:javax.annotation:$versions.javax",
       crashlytics    : "com.crashlytics.sdk.android:crashlytics:${versions.crashlytics}@aar",
+      analytics      : "com.google.android.gms:play-services-analytics:$versions.analytics",
   ]
 
   plugins = [
-      android    : 'com.android.application',
-      androidTest: 'com.android.test',
-      fabric     : 'io.fabric',
-      apt        : 'com.neenbedankt.android-apt',
-      retrolambda: 'me.tatarka.retrolambda',
+      android       : 'com.android.application',
+      androidTest   : 'com.android.test',
+      fabric        : 'io.fabric',
+      apt           : 'com.neenbedankt.android-apt',
+      retrolambda   : 'me.tatarka.retrolambda',
+      googleServices: 'com.google.gms.google-services',
   ]
 
   repositories = [

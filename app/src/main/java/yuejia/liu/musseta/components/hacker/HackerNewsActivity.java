@@ -36,6 +36,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import retrofit.RetrofitError;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
@@ -51,6 +53,8 @@ import yuejia.liu.musseta.widgets.ListDividerItemDecorator;
  * Hacker News ui.
  */
 public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> implements SwipeRefreshLayout.OnRefreshListener {
+  private static final int ACTION_SHARE = 0x8888;
+
   private static final String KEY_PREVIOUS_POSITION = "key_previous_position";
   private static final String KEY_HACKER_NEWS_ITEMS = "key_hacker_news_items";
 
@@ -58,6 +62,7 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
   @Inject CompositeSubscription subscriptions;
   @Inject HackerNewsPresenter   presenter;
   @Inject ResourceManager       resourceManager;
+  @Inject Tracker               tracker;
 
   @Bind(R.id.toolbar)          Toolbar            toolbar;
   @Bind(android.R.id.progress) ProgressBar        progress;
@@ -101,6 +106,20 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
     if (hackerNewsAdapter.items.size() > 0) {
       outState.putParcelableArrayList(KEY_HACKER_NEWS_ITEMS, hackerNewsAdapter.items);
       outState.putInt(KEY_PREVIOUS_POSITION, layoutManager.findFirstVisibleItemPosition());
+    }
+  }
+
+  @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    switch (requestCode) {
+      case ACTION_SHARE:
+        // note: the result code seems always cancel, in this case, we assume the user opening another activity gain one share action
+        tracker.send(new HitBuilders.EventBuilder()
+            .setCategory(getString(R.string.hacker_news))
+            .setAction("Share")
+            .setLabel("Item")
+            .setValue(1)
+            .build());
+        break;
     }
   }
 
@@ -286,25 +305,39 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
 
     @OnClick({R.id.root_view, R.id.reply_counting}) void onItemClick(View view) {
       Item item = (Item) itemView.getTag();
-      Context context = view.getContext();
+      HackerNewsActivity activity = (HackerNewsActivity) view.getContext();
       switch (view.getId()) {
         case R.id.root_view:
-          context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(item.url)));
+          activity.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(item.url)));
+
+          activity.tracker.send(new HitBuilders.EventBuilder()
+              .setCategory(activity.getString(R.string.hacker_news))
+              .setAction("View")
+              .setLabel("Item")
+              .setValue(1)
+              .build());
           break;
         case R.id.reply_counting:
-          context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://news.ycombinator.com/item?id=" + item.id)));
+          activity.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://news.ycombinator.com/item?id=" + item.id)));
+
+          activity.tracker.send(new HitBuilders.EventBuilder()
+              .setCategory(activity.getString(R.string.hacker_news))
+              .setAction("View")
+              .setLabel("Comments")
+              .setValue(1)
+              .build());
           break;
       }
     }
 
     @OnLongClick(R.id.root_view) boolean onItemLongClick(View view) {
       Item item = (Item) view.getTag();
-      final Context context = view.getContext();
+      final HackerNewsActivity activity = (HackerNewsActivity) view.getContext();
       Intent intent = new Intent(Intent.ACTION_SEND);
-      intent.setType(context.getString(R.string.mime_text_plain));
+      intent.setType(activity.getString(R.string.mime_text_plain));
       intent.putExtra(Intent.EXTRA_TITLE, item.title);
-      intent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.hacker_news_share_content, item.title, item.url));
-      context.startActivity(intent);
+      intent.putExtra(Intent.EXTRA_TEXT, activity.getString(R.string.hacker_news_share_content, item.title, item.url));
+      activity.startActivityForResult(intent, ACTION_SHARE);
       return true;
     }
 

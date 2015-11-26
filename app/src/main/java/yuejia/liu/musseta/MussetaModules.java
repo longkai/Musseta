@@ -6,9 +6,10 @@ import javax.inject.Singleton;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.Cache;
@@ -34,6 +35,20 @@ public class MussetaModules {
 
     @Provides @Singleton protected Application providesApplication() {
       return application;
+    }
+
+    @Provides @Singleton protected GoogleAnalytics providesGoogleAnalytics(SharedPreferences sharedPreferences) {
+      GoogleAnalytics analytics = GoogleAnalytics.getInstance(application);
+      analytics.setDryRun(BuildConfig.DEBUG); // when debug, disable tracking
+      analytics.setAppOptOut(sharedPreferences.getBoolean(application.getString(R.string.pref_enable_tracking), false));
+      return analytics;
+    }
+
+    @Provides @Singleton protected Tracker providesTracker(GoogleAnalytics analytics) {
+      int identifier = application.getResources().getIdentifier("global_tracker", "xml", application.getPackageName());
+      Tracker tracker = analytics.newTracker(identifier);
+      tracker.enableAutoActivityTracking(true);
+      return tracker;
     }
   }
 
