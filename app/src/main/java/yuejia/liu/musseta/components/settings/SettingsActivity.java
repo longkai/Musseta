@@ -27,7 +27,7 @@ public class SettingsActivity extends MussetaActivity<SettingsComponent> {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_settings);
+    setContentView(R.layout.layout_settings);
     ButterKnife.bind(this);
     setSupportActionBar(toolbar);
   }

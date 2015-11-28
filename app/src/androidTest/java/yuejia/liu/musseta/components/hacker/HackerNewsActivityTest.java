@@ -72,7 +72,7 @@ import static org.mockito.Mockito.when;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class HackerNewsActivityTest {
-  @Rule public IntentsTestRule<HackerNewsActivity> rule = new IntentsTestRule<>(HackerNewsActivity.class, true, false);
+  @Rule public final IntentsTestRule<HackerNewsActivity> rule = new IntentsTestRule<>(HackerNewsActivity.class, true, false);
 
   @Mock HackerNewsApi  hackerNewsApi;
   @Mock NetworkWatcher networkWatcher;

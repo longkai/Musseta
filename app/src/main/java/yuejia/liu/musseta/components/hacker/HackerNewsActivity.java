@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -81,7 +80,7 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    setContentView(R.layout.activity_hacker_news);
+    setContentView(R.layout.layout_hacker_news);
     ButterKnife.bind(this);
 
     setupViews();
@@ -255,7 +254,7 @@ public class HackerNewsActivity extends MussetaActivity<HackerNewsComponent> imp
 
     @Override public HackerNewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
       final Context context = parent.getContext();
-      View itemView = LayoutInflater.from(context).inflate(R.layout.layout_hacker_news_item, parent, false);
+      View itemView = LayoutInflater.from(context).inflate(R.layout.widget_hacker_news_item, parent, false);
       return new HackerNewsViewHolder(itemView);
     }
 

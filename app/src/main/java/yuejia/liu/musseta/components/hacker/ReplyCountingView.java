@@ -49,8 +49,12 @@ public class ReplyCountingView extends View {
   }
 
   @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    setMeasuredDimension(replayOutline.getIntrinsicWidth() + getPaddingLeft() + getPaddingRight(),
-        replayOutline.getIntrinsicHeight() + getPaddingTop() + getPaddingBottom());
+    int width = (int) (replayOutline.getIntrinsicWidth() * SCALE_FACTOR);
+    int height = (int) (replayOutline.getIntrinsicHeight() * SCALE_FACTOR);
+    setMeasuredDimension(
+        resolveSize(width + getPaddingLeft() + getPaddingRight(), widthMeasureSpec),
+        resolveSize(height + getPaddingTop() + getPaddingBottom(), heightMeasureSpec)
+    );
   }
 
   @Override protected void onDraw(Canvas canvas) {
@@ -60,6 +64,7 @@ public class ReplyCountingView extends View {
     int replayOutlineIntrinsicWidth = (int) (replayOutline.getIntrinsicWidth() * SCALE_FACTOR);
     int replayOutlineIntrinsicHeight = (int) (replayOutline.getIntrinsicHeight() * SCALE_FACTOR);
 
+    // always center no matter what the measured bounds
     int left = (getWidth() - replayOutlineIntrinsicWidth) >> 1;
     int top = (getHeight() - replayOutlineIntrinsicHeight) >> 1;
     replayOutline.setBounds(left, top, left + replayOutlineIntrinsicWidth, top + replayOutlineIntrinsicHeight);

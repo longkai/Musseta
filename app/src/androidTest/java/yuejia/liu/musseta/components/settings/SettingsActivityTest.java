@@ -12,6 +12,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import yuejia.liu.musseta.MussetaTesting;
@@ -36,7 +37,7 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class SettingsActivityTest {
-  public final ActivityTestRule<SettingsActivity> rule = new ActivityTestRule<>(SettingsActivity.class, true, false);
+  @Rule public final ActivityTestRule<SettingsActivity> rule = new ActivityTestRule<>(SettingsActivity.class, true, false);
 
   @Inject SharedPreferences preferences;
 
