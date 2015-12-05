@@ -15,3 +15,5 @@ crashlytics-build.properties
 gradle.properties
 fabric.properties
 google-services.json
+
+.ignored/
