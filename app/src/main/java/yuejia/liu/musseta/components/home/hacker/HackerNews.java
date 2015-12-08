@@ -1,4 +1,4 @@
-package yuejia.liu.musseta.components.hacker;
+package yuejia.liu.musseta.components.home.hacker;
 
 import javax.inject.Qualifier;
 

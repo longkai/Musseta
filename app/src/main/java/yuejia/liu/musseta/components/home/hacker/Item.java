@@ -1,7 +1,9 @@
-package yuejia.liu.musseta.components.hacker;
+package yuejia.liu.musseta.components.home.hacker;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v4.os.ParcelableCompat;
+import android.support.v4.os.ParcelableCompatCreatorCallbacks;
 
 /**
  * HN item model.
@@ -77,11 +79,15 @@ public class Item implements Parcelable {
     this.descendants = in.readInt();
   }
 
-  public static final Creator<Item> CREATOR = new Creator<Item>() {
-    public Item createFromParcel(Parcel source) {return new Item(source);}
+  public static final Creator<Item> CREATOR = ParcelableCompat.newCreator(new ParcelableCompatCreatorCallbacks<Item>() {
+    @Override public Item createFromParcel(Parcel in, ClassLoader loader) {
+      return new Item(in);
+    }
 
-    public Item[] newArray(int size) {return new Item[size];}
-  };
+    @Override public Item[] newArray(int size) {
+      return new Item[size];
+    }
+  });
 
   public static final class Builder {
     private long id;

@@ -13,8 +13,7 @@
       android:label="@string/app_name"
       android:theme="@style/Musseta">
 
-    <activity
-        android:name=".components.hacker.HackerNewsActivity">
+    <activity android:name=".components.home.HomeActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />

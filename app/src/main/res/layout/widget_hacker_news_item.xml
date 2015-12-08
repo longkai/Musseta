@@ -1,38 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.v7.widget.GridLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root_view"
-    android:orientation="vertical"
+    android:id="@id/root_view"
+    app:orientation="vertical"
+    app:columnOrderPreserved="true"
+    app:columnCount="3"
+    app:rowCount="2"
+    app:alignmentMode="alignBounds"
     android:background="?attr/selectableItemBackground"
-    android:padding="8dp"
+    android:paddingLeft="@dimen/hacker_news_horizontal_padding"
+    android:paddingRight="@dimen/hacker_news_horizontal_padding"
+    android:paddingTop="@dimen/hacker_news_vertical_padding"
+    android:paddingBottom="@dimen/hacker_news_vertical_padding"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-  <yuejia.liu.musseta.components.hacker.ReplyCountingView
-      android:id="@+id/reply_counting"
-      android:background="?attr/selectableItemBackgroundBorderless"
-      android:padding="8dp"
-      android:layout_alignParentRight="true"
-      android:layout_centerVertical="true"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content" />
-
   <TextView
       android:id="@android:id/title"
-      android:layout_toLeftOf="@id/reply_counting"
-      android:layout_marginRight="8dp"
-      android:textAppearance="?attr/textAppearanceListItem"
-      tools:text="This is the title1"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
+      app:layout_columnSpan="3"
+      tools:text="Unexplored Areas in Data CompressionAreas in Data Compression"
+      android:textSize="14sp"
+      android:textColor="#313232"
+      android:layout_marginBottom="8dp"
+      />
 
   <TextView
       android:id="@android:id/text1"
-      android:layout_marginTop="8dp"
-      android:layout_below="@android:id/title"
-      android:textColor="@color/material_grey_700"
-      tools:text="This is the sub title!"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
-</RelativeLayout>
+      tools:text="medium.com · 4 hours ago"
+      app:layout_columnWeight="1"
+      app:layout_gravity="center_vertical"
+      android:textSize="10sp"
+      android:textColor="#6F6F6F"
+      />
+
+  <TextView
+      android:id="@+id/points"
+      tools:text="25"
+      android:textSize="10sp"
+      app:layout_gravity="center_vertical"
+      android:gravity="center_vertical"
+      android:layout_marginRight="8dp"
+      android:textColor="#6F6F6F"
+      android:minWidth="40dp"
+      android:drawablePadding="4dp"
+      android:drawableLeft="@mipmap/ic_score_outline_16dp"
+      />
+
+  <TextView
+      android:id="@+id/reply_counting"
+      android:background="?attr/selectableItemBackgroundBorderless"
+      tools:text="25"
+      app:layout_gravity="center_vertical"
+      android:gravity="center_vertical"
+      android:textColor="#6F6F6F"
+      android:textSize="10sp"
+      android:minWidth="40dp"
+      android:drawablePadding="4dp"
+      android:drawableLeft="@mipmap/ic_chat_bubble_outline_16dp"
+      />
+</android.support.v7.widget.GridLayout>

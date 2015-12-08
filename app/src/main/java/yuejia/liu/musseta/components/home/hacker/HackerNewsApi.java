@@ -1,4 +1,4 @@
-package yuejia.liu.musseta.components.hacker;
+package yuejia.liu.musseta.components.home.hacker;
 
 import retrofit.http.GET;
 import retrofit.http.Path;

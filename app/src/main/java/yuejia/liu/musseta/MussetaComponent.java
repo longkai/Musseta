@@ -3,8 +3,8 @@ package yuejia.liu.musseta;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import yuejia.liu.musseta.components.hacker.HackerNewsComponent;
-import yuejia.liu.musseta.components.hacker.HackerNewsModule;
+import yuejia.liu.musseta.components.home.HomeComponent;
+import yuejia.liu.musseta.components.home.HomeModule;
 import yuejia.liu.musseta.components.settings.SettingsComponent;
 
 /**
@@ -20,5 +20,5 @@ import yuejia.liu.musseta.components.settings.SettingsComponent;
 public interface MussetaComponent {
   SettingsComponent plus();
 
-  HackerNewsComponent plus(HackerNewsModule module);
+  HomeComponent plus(HomeModule module);
 }

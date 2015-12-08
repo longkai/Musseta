@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="hacker_news_horizontal_padding">16dp</dimen>
+  <dimen name="hacker_news_vertical_padding">10dp</dimen>
+</resources>

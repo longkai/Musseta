@@ -1,7 +1,5 @@
-package yuejia.liu.musseta.components.hacker;
+package yuejia.liu.musseta.components.home;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -11,7 +9,6 @@ import android.app.Application;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.ViewActions;
@@ -22,7 +19,6 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,79 +28,73 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import retrofit.RestAdapter;
 import rx.Observable;
-import timber.log.Timber;
 import yuejia.liu.musseta.DaggerMussetaTestingComponent;
 import yuejia.liu.musseta.MussetaModules;
 import yuejia.liu.musseta.MussetaTesting;
 import yuejia.liu.musseta.MussetaTestingRunner;
 import yuejia.liu.musseta.R;
-import yuejia.liu.musseta.components.settings.SettingsActivity;
+import yuejia.liu.musseta.components.home.hacker.HackerNews;
+import yuejia.liu.musseta.components.home.hacker.HackerNewsApi;
+import yuejia.liu.musseta.components.home.hacker.HackerNewsLayout;
+import yuejia.liu.musseta.components.home.hacker.Item;
 import yuejia.liu.musseta.misc.NetworkWatcher;
+import yuejia.liu.musseta.misc.RecyclerViewMatchers;
+import yuejia.liu.musseta.misc.SessionIdentifierGenerator;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.doubleClick;
-import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasType;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by longkai on 11/9/15.
+ * Hacker News layout which lives in {@link HomeActivity} tests.
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class HackerNewsActivityTest {
-  @Rule public final IntentsTestRule<HackerNewsActivity> rule = new IntentsTestRule<>(HackerNewsActivity.class, true, false);
+public class HackerNewsLayoutTest {
+  @Rule public final IntentsTestRule<HomeActivity> rule = new IntentsTestRule<>(HomeActivity.class, true, false);
 
   @Mock HackerNewsApi  hackerNewsApi;
   @Mock NetworkWatcher networkWatcher;
 
+  SessionIdentifierGenerator generator = new SessionIdentifierGenerator();
   List<Item> testingItems;
 
   @Before public void setUp() throws Exception {
-    SessionIdentifierGenerator generator = new SessionIdentifierGenerator();
-
     testingItems = new ArrayList<>();
     // TODO: 11/12/15 this result a null member NPE bug, the library should fix it..
     MockitoAnnotations.initMocks(this);
-    // let' s start with 50 samples
-    Long[] ids = new Long[50];
-    when(hackerNewsApi.topStories()).thenReturn(Observable.just(ids));
+    // let' s start with PER_PAGE samples
+    Long[] ids = new Long[HackerNewsLayout.PER_PAGE];
 
     for (int i = 0; i < ids.length; i++) {
       ids[i] = Long.valueOf(i);
       testingItems.add(new Item.Builder().title(generator.nextSessionId()).url("http://longist.me/items/" + i).build());
       when(hackerNewsApi.item(ids[i])).thenReturn(testingItems.get(i));
     }
+    when(hackerNewsApi.topStories()).thenReturn(Observable.just(ids));
 
     MussetaTestingRunner.get().addHooks((activity, bundle) -> {
-      HackerNewsActivity hackerNewsActivity = (HackerNewsActivity) activity;
-      HackerNewsTestingComponent hackerNewsTestingComponent = MussetaTesting.get(activity).getMussetaTestingComponent()
-          .plus(new HackerNewsModule(hackerNewsActivity) {
-            @Override public HackerNewsApi providesHackerNewsApi(@HackerNews RestAdapter restAdapter) {
+      HomeActivity homeActivity = (HomeActivity) activity;
+      HomeTestingComponent homeTestingComponent = MussetaTesting.get(activity).getMussetaTestingComponent()
+          .plus(new HomeModule(homeActivity) {
+            @Override protected HackerNewsApi providesHackerNewsApi(@HackerNews RestAdapter restAdapter) {
               return hackerNewsApi;
             }
           });
-      hackerNewsTestingComponent.injectTesting(HackerNewsActivityTest.this);
-      hackerNewsActivity.setActivityComponent(hackerNewsTestingComponent);
+      homeTestingComponent.injectTesting(this);
+      homeActivity.setActivityComponent(homeTestingComponent);
     });
   }
 
@@ -117,21 +107,9 @@ public class HackerNewsActivityTest {
     rule.launchActivity(null);
     // since espresso will wait util ui thread is idle,
     // so the first time espresso attach it, the items loading is done.
+    onView(withId(android.R.id.empty)).check(matches(not(isDisplayed())));
     onView(withId(android.R.id.progress)).check(matches(not(isDisplayed())));
     onView(withId(R.id.recycler_view)).check(matches(isDisplayed()));
-  }
-
-  @Test public void testDoubleTapToTop() throws Exception {
-    rule.launchActivity(null);
-
-    onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.scrollToPosition(testingItems.size() - 1));
-    // che the first one is not displayed
-    onView(withText(testingItems.get(0).title)).check(doesNotExist());
-
-    onView(withId(R.id.toolbar)).perform(doubleClick());
-
-    // yet another way to check the first item matches
-    assertThat(rule.getActivity().layoutManager.findFirstCompletelyVisibleItemPosition(), is(0));
   }
 
   @Test public void testTapItem() throws Exception {
@@ -148,30 +126,6 @@ public class HackerNewsActivityTest {
         hasAction(Intent.ACTION_VIEW),
         hasData(testingItems.get(position).url)
     ));
-  }
-
-  @Test public void testLongTapItem() throws Exception {
-    rule.launchActivity(null);
-    intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
-
-    int position = (int) (Math.random() * testingItems.size());
-    String targetTitle = testingItems.get(position).title;
-
-    Espresso.closeSoftKeyboard();
-    TimeUnit.SECONDS.sleep(1);
-
-    try {
-      onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(position, longClick()));
-
-      intended(allOf(
-          hasAction(Intent.ACTION_SEND),
-          hasExtra(Intent.EXTRA_TITLE, targetTitle),
-          hasType(rule.getActivity().getString(R.string.mime_text_plain))
-      ));
-    } catch (Exception ex) {
-      // TODO: 11/15/15 wait AOSP to fix it
-      Timber.wtf(ex, "should not happen Injecting to another application requires INJECT_EVENTS permission");
-    }
   }
 
   @Test public void testNoNetwork() throws Exception {
@@ -195,7 +149,7 @@ public class HackerNewsActivityTest {
 
     // no connection
     TimeUnit.SECONDS.sleep(1); // hands on... not that quickly...
-    onView(withText(R.string.network_problem)).check(matches(isDisplayed()));
+    onView(withText(R.string.network_error)).check(matches(isDisplayed()));
   }
 
   @Test public void testRetry() throws Exception {
@@ -209,7 +163,8 @@ public class HackerNewsActivityTest {
 
     onView(withText(R.string.retry)).perform(click()).check(doesNotExist());
 
-    assertThat(rule.getActivity().layoutManager.getItemCount(), Matchers.greaterThan(0));
+    onView(withId(android.R.id.empty))
+        .check(matches(not(isDisplayed())));
   }
 
   @Test public void testClickReplyCounting() throws Exception {
@@ -238,26 +193,33 @@ public class HackerNewsActivityTest {
     ));
   }
 
-  @Test public void testOpenSettingsUI() throws Exception {
-    HackerNewsActivity activity = rule.launchActivity(null);
+  @Test public void testRefresh() throws Exception {
+    // reset
+    Long[] ids = new Long[500];
 
-    intending(isInternal()).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
-
-    openActionBarOverflowOrOptionsMenu(activity);
-
-    onView(withText(R.string.settings)).perform(click());
-
-    intended(allOf(
-        toPackage(activity.getPackageName()),
-        hasComponent(SettingsActivity.class.getName())
-    ));
-  }
-
-  public static final class SessionIdentifierGenerator {
-    private SecureRandom random = new SecureRandom();
-
-    public String nextSessionId() {
-      return new BigInteger(130, random).toString(32);
+    for (int i = 0; i < ids.length; i++) {
+      ids[i] = Long.valueOf(i);
+      testingItems.add(new Item.Builder().title(generator.nextSessionId()).url("http://longist.me/items/" + i).build());
+      when(hackerNewsApi.item(ids[i])).thenReturn(testingItems.get(i));
     }
+    when(hackerNewsApi.topStories()).thenReturn(Observable.just(ids));
+
+    rule.launchActivity(null);
+
+    // perform a loading...
+    onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.scrollToPosition(HackerNewsLayout.PER_PAGE - HackerNewsLayout.PRE_LOADING_OFFSET + 2));
+
+    TimeUnit.SECONDS.sleep(1); // wait...
+
+    // check has loading more data
+    onView(withId(R.id.recycler_view)).check(matches(RecyclerViewMatchers.hasCount(RecyclerViewMatchers.LARGER_THAN, HackerNewsLayout.PER_PAGE)));
+
+    // swipe to refresh...
+    onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.scrollToPosition(0));
+    onView(withId(R.id.refresh_layout)).perform(ViewActions.swipeDown());
+
+    TimeUnit.SECONDS.sleep(1); // wait...
+
+    onView(withId(R.id.recycler_view)).check(matches(RecyclerViewMatchers.hasCount(RecyclerViewMatchers.AT_MOST, HackerNewsLayout.PER_PAGE)));
   }
 }
