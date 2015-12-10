@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
@@ -21,6 +20,9 @@ import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v4.os.ParcelableCompat;
+import android.support.v4.os.ParcelableCompatCreatorCallbacks;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -52,6 +54,7 @@ import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 import yuejia.liu.musseta.R;
 import yuejia.liu.musseta.components.home.HomeActivity;
+import yuejia.liu.musseta.misc.ErrorMetaRetriever;
 import yuejia.liu.musseta.misc.NetworkWatcher;
 import yuejia.liu.musseta.ui.ViewInstanceStateLifecycle;
 import yuejia.liu.musseta.widgets.EnhancedRecyclerView;
@@ -70,9 +73,10 @@ public class HackerNewsLayout extends FrameLayout implements SwipeRefreshLayout.
 
   @BindColor(R.color.material_amber_500) int refreshColor;
 
-  @Inject Picasso        picasso;
-  @Inject HackerNewsApi  hackerNewsApi;
-  @Inject NetworkWatcher networkWatcher;
+  @Inject Picasso            picasso;
+  @Inject HackerNewsApi      hackerNewsApi;
+  @Inject NetworkWatcher     networkWatcher;
+  @Inject ErrorMetaRetriever errorMetaRetriever;
 
   private final CompositeSubscription subscriptions = new CompositeSubscription();
   private final Object                picassoTag    = subscriptions;
@@ -160,7 +164,7 @@ public class HackerNewsLayout extends FrameLayout implements SwipeRefreshLayout.
     if (networkWatcher.hasNetwork()) {
       bootstrap();
     } else {
-      afterRequest(RetrofitError.networkError(null, new IOException("Network error...")));
+      afterRequest(RetrofitError.networkError(null, new IOException(getResources().getString(R.string.network_error))));
     }
   }
 
@@ -234,25 +238,9 @@ public class HackerNewsLayout extends FrameLayout implements SwipeRefreshLayout.
   // TODO: 12/7/15 makes it a specific error handler
   private void onError(Throwable e) {
     if (e != null) {
-      if (e instanceof RetrofitError) {
-        RetrofitError error = (RetrofitError) e;
-        Resources res = getResources();
-        String message = null;
-        switch (error.getKind()) {
-          case HTTP:
-            message = res.getString(R.string.http_error, error.getResponse().getStatus());
-            break;
-          case NETWORK:
-            message = res.getString(R.string.network_error);
-            break;
-          case CONVERSION:
-            message = res.getString(R.string.conversion_error);
-            break;
-          case UNEXPECTED:
-            message = res.getString(R.string.unexpected_error);
-            break;
-        }
-        Snackbar.make(recyclerView, message, Snackbar.LENGTH_INDEFINITE)
+      Pair<String, Boolean> pair = errorMetaRetriever.retrieve(e);
+      if (pair.second) {
+        Snackbar.make(recyclerView, pair.first, Snackbar.LENGTH_INDEFINITE)
             .setAction(R.string.retry, v -> {
               if (topStories.size() == 0) {
                 bootstrap();
@@ -262,8 +250,7 @@ public class HackerNewsLayout extends FrameLayout implements SwipeRefreshLayout.
             })
             .show();
       } else {
-        Timber.d(e, "loading fail!");
-        Snackbar.make(recyclerView, e.getMessage(), Snackbar.LENGTH_INDEFINITE).show();
+        Snackbar.make(recyclerView, pair.first, Snackbar.LENGTH_INDEFINITE).show();
       }
     }
   }
@@ -318,15 +305,15 @@ public class HackerNewsLayout extends FrameLayout implements SwipeRefreshLayout.
       out.writeList(items);
     }
 
-    public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
-      @Override public SavedState createFromParcel(Parcel source) {
-        return new SavedState(source);
+    public static final Creator<SavedState> CREATOR = ParcelableCompat.newCreator(new ParcelableCompatCreatorCallbacks<SavedState>() {
+      @Override public SavedState createFromParcel(Parcel in, ClassLoader loader) {
+        return new SavedState(in);
       }
 
       @Override public SavedState[] newArray(int size) {
         return new SavedState[size];
       }
-    };
+    });
   }
 
   private static class HackerNewsAdapter extends RecyclerView.Adapter<HackerNewsViewHolder> {

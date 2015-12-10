@@ -46,6 +46,9 @@ android {
 
     manifestPlaceholders = ["channel": "dev"] // default to dev chanel
 
+    buildConfigField "String", "PRODUCT_HUNT_API_KEY", "\"${PRODUCT_HUNT_API_KEY}\""
+    buildConfigField "String", "PRODUCT_HUNT_API_SETRECT", "\"${PRODUCT_HUNT_API_SETRECT}\""
+
     testInstrumentationRunner 'yuejia.liu.musseta.MussetaTestingRunner'
 
     testInstrumentationRunnerArguments disableAnalytics: 'true'
@@ -141,6 +144,7 @@ dependencies {
   compile rootProject.ext.dependencies.recyclerview
   compile rootProject.ext.dependencies.preference
   compile rootProject.ext.dependencies.gridlayout
+  compile rootProject.ext.dependencies.cardview
 
   compile rootProject.ext.dependencies.butterKnife
   compile rootProject.ext.dependencies.timber

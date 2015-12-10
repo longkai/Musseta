@@ -12,4 +12,8 @@
     
     <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
   </style>
+
+  <style name="xx" parent="CardView.Light">
+
+  </style>
 </resources>

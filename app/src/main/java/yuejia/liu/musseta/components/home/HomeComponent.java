@@ -4,6 +4,7 @@ import dagger.Subcomponent;
 import yuejia.liu.musseta.components.ActivityComponent;
 import yuejia.liu.musseta.components.ActivityScope;
 import yuejia.liu.musseta.components.home.hacker.HackerNewsLayout;
+import yuejia.liu.musseta.components.home.product.ProductHuntLayout;
 
 /**
  * The Home component.
@@ -12,4 +13,6 @@ import yuejia.liu.musseta.components.home.hacker.HackerNewsLayout;
 @Subcomponent(modules = HomeModule.class)
 public interface HomeComponent extends ActivityComponent<HomeActivity> {
   void inject(HackerNewsLayout layout);
+
+  void inject(ProductHuntLayout layout);
 }

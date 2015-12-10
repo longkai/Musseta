@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso;
 import dagger.Module;
 import dagger.Provides;
 import timber.log.Timber;
+import yuejia.liu.musseta.misc.ErrorMetaRetriever;
 import yuejia.liu.musseta.misc.NetworkWatcher;
 
 /**
@@ -85,11 +86,15 @@ public class MussetaModules {
   @Module
   public static class UtilityModule {
     @Provides @Singleton protected Gson providesGson() {
-      GsonBuilder builder = new GsonBuilder();
+      GsonBuilder builder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
       if (BuildConfig.DEBUG) {
         builder.setPrettyPrinting();
       }
       return builder.create();
+    }
+
+    @Provides @Singleton protected ErrorMetaRetriever providesErrorMetaRetriever(Application application) {
+      return new ErrorMetaRetriever(application);
     }
   }
 }

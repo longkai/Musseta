@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="product_hunt_access_token">product_hunt_access_token</string>
+
   <bool name="settings_def_enable_tracking">true</bool>
   <string name="settings_key_enable_tracking">settings_enable_tracking</string>
   <string name="settings_title_enable_tracking">Anonymous Tracking</string>

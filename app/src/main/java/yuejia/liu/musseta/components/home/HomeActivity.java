@@ -61,7 +61,19 @@ public class HomeActivity extends MussetaActivity<HomeComponent> {
     }
 
     @Override public View instantiateView(ViewGroup container, int position) {
-      return LayoutInflater.from(container.getContext()).inflate(R.layout.layout_hacker_news, container, false);
+      int layoutResId;
+      switch (position) {
+        case 0:
+//          layoutResId = R.layout.layout_hacker_news;
+          layoutResId = R.layout.layout_product_hunt;
+          break;
+        case 1:
+          layoutResId = R.layout.layout_product_hunt;
+          break;
+        default:
+          throw new IllegalArgumentException("No such position " + position);
+      }
+      return LayoutInflater.from(container.getContext()).inflate(layoutResId, container, false);
     }
 
     @Override public int getCount() {
