@@ -5,4 +5,6 @@
 
   <dimen name="product_hunt_card_spacing">8dp</dimen>
   <dimen name="product_hunt_card_avatar_bound">20dp</dimen>
+
+  <dimen name="dribbble_player_avatar_bound">20dp</dimen>
 </resources>

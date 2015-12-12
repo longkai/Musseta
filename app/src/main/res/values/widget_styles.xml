@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <style name="Dribbble" />
+
+  <style name="Dribbble.Shot">
+    <item name="android:textSize">12sp</item>
+    <item name="android:textColor">#878787</item>
+    <item name="android:drawablePadding">4dp</item>
+    <item name="android:gravity">center_vertical</item>
+    <item name="layout_gravity">center_vertical|right</item>
+  </style>
+</resources>

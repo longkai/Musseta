@@ -49,6 +49,8 @@ android {
     buildConfigField "String", "PRODUCT_HUNT_API_KEY", "\"${PRODUCT_HUNT_API_KEY}\""
     buildConfigField "String", "PRODUCT_HUNT_API_SETRECT", "\"${PRODUCT_HUNT_API_SETRECT}\""
 
+    buildConfigField "String", "DRIBBBLE_CLIENT_ACCESS_TOKEN", "\"${DRIBBBLE_CLIENT_ACCESS_TOKEN}\""
+
     testInstrumentationRunner 'yuejia.liu.musseta.MussetaTestingRunner'
 
     testInstrumentationRunnerArguments disableAnalytics: 'true'
