@@ -40,6 +40,7 @@ import butterknife.BindInt;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -390,6 +391,13 @@ public class ProductHuntLayout extends FrameLayout implements SwipeRefreshLayout
 
     @OnClick(R.id.root_view) void click(View view) {
       Post post = (Post) view.getTag();
+      final HomeActivity activity = (HomeActivity) view.getContext();
+      activity.getTracker().send(new HitBuilders.EventBuilder()
+          .setCategory(activity.getString(R.string.product_hunt))
+          .setAction("View")
+          .setLabel("Item")
+          .setValue(1)
+          .build());
       view.getContext().startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(post.discussion_url)));
     }
 

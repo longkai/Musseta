@@ -8,8 +8,10 @@ import javax.inject.Inject;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -34,6 +36,7 @@ import butterknife.Bind;
 import butterknife.BindInt;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.google.android.gms.analytics.HitBuilders;
 import com.squareup.picasso.Picasso;
 import retrofit.RetrofitError;
 import rx.Subscription;
@@ -335,8 +338,15 @@ public class ShotsLayout extends FrameLayout implements SwipeRefreshLayout.OnRef
     @Bind(R.id.like_count)     TextView  likeCount;
 
     @OnClick(R.id.root_view) void click(View view) {
+      final HomeActivity activity = (HomeActivity) view.getContext();
+      activity.getTracker().send(new HitBuilders.EventBuilder()
+          .setCategory(activity.getString(R.string.dribbble))
+          .setAction("View")
+          .setLabel("Item")
+          .setValue(1)
+          .build());
       Shot shot = (Shot) view.getTag();
-
+      activity.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(shot.html_url)));
     }
 
     public ShotViewHolder(View itemView) {
