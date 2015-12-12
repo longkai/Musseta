@@ -36,6 +36,7 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.BindColor;
+import butterknife.BindInt;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -49,23 +50,22 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 import yuejia.liu.musseta.R;
 import yuejia.liu.musseta.components.home.HomeActivity;
 import yuejia.liu.musseta.misc.ErrorMetaRetriever;
+import yuejia.liu.musseta.misc.MathHelper;
 import yuejia.liu.musseta.misc.NetworkWatcher;
 import yuejia.liu.musseta.misc.RoundedTransformation;
+import yuejia.liu.musseta.ui.ViewInstanceStateLifecycle;
 import yuejia.liu.musseta.widgets.EnhancedRecyclerView;
 
 /**
  * The Product Hunt listing layout.
  */
-public class ProductHuntLayout extends FrameLayout implements SwipeRefreshLayout.OnRefreshListener {
+public class ProductHuntLayout extends FrameLayout implements SwipeRefreshLayout.OnRefreshListener, ViewInstanceStateLifecycle {
   public static final int PRE_LOADING_OFFSET = 7;
 
   private final CompositeSubscription subscriptions = new CompositeSubscription();
@@ -76,6 +76,7 @@ public class ProductHuntLayout extends FrameLayout implements SwipeRefreshLayout
   @Bind(R.id.refresh_layout)   SwipeRefreshLayout   swipeRefreshLayout;
   @Bind(R.id.recycler_view)    EnhancedRecyclerView recyclerView;
 
+  @BindInt(R.integer.product_hunt_grid_span)      int    gridSpan;
   @BindColor(R.color.product_hunt_accent)         int    productHuntAccentColor;
   @BindString(R.string.product_hunt_access_token) String accessTokenKey;
 
@@ -89,8 +90,9 @@ public class ProductHuntLayout extends FrameLayout implements SwipeRefreshLayout
   private PostsAdapter               postsAdapter;
   private StaggeredGridLayoutManager layoutManager;
 
-  private int     days_ago;
-  private boolean loading;
+  private int        days_ago;
+  private boolean    loading;
+  private SavedState savedState;
 
   public ProductHuntLayout(Context context) {
     this(context, null);
@@ -108,15 +110,15 @@ public class ProductHuntLayout extends FrameLayout implements SwipeRefreshLayout
 
   private void bootstrap(Context context, @Nullable AttributeSet attrs, int defStyle) {
     ((HomeActivity) context).getActivityComponent().inject(this);
-    inflate(context, R.layout.merge_home_pager_layout, this);
+    populateLayout(context);
 
     postsAdapter = new PostsAdapter(context, picasso, picassoTag);
-    layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+    layoutManager = new StaggeredGridLayoutManager(gridSpan, StaggeredGridLayoutManager.VERTICAL);
     layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
   }
 
-  @Override protected void onFinishInflate() {
-    super.onFinishInflate();
+  private void populateLayout(Context context) {
+    inflate(context, R.layout.merge_home_pager_layout, this);
     ButterKnife.bind(this);
 
     picasso.load(R.mipmap.empty_list_4x)
@@ -139,12 +141,21 @@ public class ProductHuntLayout extends FrameLayout implements SwipeRefreshLayout
       @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
         int[] positions = layoutManager.findLastVisibleItemPositions(null);
-        int last = Math.max(positions[0], positions[1]);
+        int last = MathHelper.max(positions);
         if (last >= layoutManager.getItemCount() - PRE_LOADING_OFFSET) {
           requestPosts();
         }
       }
     });
+
+    if (savedState != null) {
+      days_ago = savedState.days_ago;
+      postsAdapter.appendAll(savedState.posts);
+      layoutManager.scrollToPosition(savedState.lastFirstPosition);
+
+      afterRequest(null);
+      return;
+    }
 
     if (!networkWatcher.hasNetwork()) {
       afterRequest(RetrofitError.networkError(null, new IOException(getResources().getString(R.string.network_error))));
@@ -247,14 +258,21 @@ public class ProductHuntLayout extends FrameLayout implements SwipeRefreshLayout
     super.onDetachedFromWindow();
   }
 
-  @Override protected Parcelable onSaveInstanceState() {
+  @Override public Parcelable onSaveInstanceState() {
+    if (layoutManager.getItemCount() == 0) {
+      return null;
+    }
     Parcelable parcelable = super.onSaveInstanceState();
     SavedState savedState = new SavedState(parcelable);
+    savedState.days_ago = days_ago;
+    int[] positions = layoutManager.findFirstVisibleItemPositions(null);
+    savedState.lastFirstPosition = MathHelper.min(positions);
+    savedState.posts = postsAdapter.posts;
     return savedState;
   }
 
-  @Override protected void onRestoreInstanceState(Parcelable state) {
-    SavedState savedState = (SavedState) state;
+  @Override public void onRestoreInstanceState(Parcelable state) {
+    savedState = (SavedState) state;
     super.onRestoreInstanceState(savedState.getSuperState());
   }
 
@@ -269,14 +287,26 @@ public class ProductHuntLayout extends FrameLayout implements SwipeRefreshLayout
   }
 
   private static class SavedState extends BaseSavedState {
-    private int days_ago;
+    private int        days_ago;
+    private int        lastFirstPosition;
+    private List<Post> posts;
 
     public SavedState(Parcel source) {
       super(source);
+      days_ago = source.readInt();
+      lastFirstPosition = source.readInt();
+      source.readArray(null);
     }
 
     public SavedState(Parcelable superState) {
       super(superState);
+    }
+
+    @Override public void writeToParcel(Parcel out, int flags) {
+      super.writeToParcel(out, flags);
+      out.writeInt(days_ago);
+      out.writeInt(lastFirstPosition);
+      out.writeList(posts);
     }
 
     public static final Creator<SavedState> CREATOR = ParcelableCompat.newCreator(new ParcelableCompatCreatorCallbacks<SavedState>() {
@@ -291,7 +321,7 @@ public class ProductHuntLayout extends FrameLayout implements SwipeRefreshLayout
   }
 
   private static class PostsAdapter extends RecyclerView.Adapter<PostCardViewHolder> {
-    private final int             avatarRoundRadius;
+    private final int avatarRoundRadius;
 
     private final List<Post>      posts;
     private final Picasso         picasso;

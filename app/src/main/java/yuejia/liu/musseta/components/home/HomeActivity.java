@@ -19,6 +19,8 @@ import com.google.android.gms.analytics.Tracker;
 import yuejia.liu.musseta.Musseta;
 import yuejia.liu.musseta.R;
 import yuejia.liu.musseta.components.home.dribbble.ShotsLayout;
+import yuejia.liu.musseta.components.home.hacker.HackerNewsLayout;
+import yuejia.liu.musseta.components.home.product.ProductHuntLayout;
 import yuejia.liu.musseta.ui.MussetaActivity;
 import yuejia.liu.musseta.ui.StatePagerAdapter;
 
@@ -61,21 +63,21 @@ public class HomeActivity extends MussetaActivity<HomeComponent> {
     }
 
     @Override public View instantiateView(ViewGroup container, int position) {
-//      int layoutResId;
-//      switch (position) {
-//        case 0:
-////          layoutResId = R.layout.layout_hacker_news;
-//          layoutResId = R.layout.layout_product_hunt;
-//          break;
-//        case 1:
-//          layoutResId = R.layout.layout_product_hunt;
-//          break;
-//        default:
-//          throw new IllegalArgumentException("No such position " + position);
-//      }
-//      return LayoutInflater.from(container.getContext()).inflate(layoutResId, container, false);
-      ShotsLayout layout = new ShotsLayout(container.getContext());
-      layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+      final Context context = container.getContext();
+      View layout;
+      switch (position) {
+        case 0:
+          layout = new HackerNewsLayout(context);
+          break;
+        case 1:
+          layout = new ProductHuntLayout(context);
+          break;
+        case 2:
+          layout = new ShotsLayout(context);
+          break;
+        default:
+          throw new IllegalArgumentException("No such position " + position);
+      }
       return layout;
     }
 

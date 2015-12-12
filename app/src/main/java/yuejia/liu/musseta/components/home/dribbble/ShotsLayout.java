@@ -99,15 +99,14 @@ public class ShotsLayout extends FrameLayout implements SwipeRefreshLayout.OnRef
 
   private void bootstrap(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
     ((HomeActivity) context).getActivityComponent().inject(this);
-
-    setupViews(context);
+    populateLayout(context);
 
     layoutManager = new GridLayoutManager(context, gridSpan);
     shotsAdapter = new ShotsAdapter(context, picasso, picassoTag);
     shotDecoration = new ShotDecoration(context, gridSpan);
   }
 
-  private void setupViews(Context context) {
+  private void populateLayout(Context context) {
     inflate(context, R.layout.merge_home_pager_layout, this);
     ButterKnife.bind(this);
     swipeRefreshLayout.setColorSchemeColors(R.color.dirbbble_accent);
@@ -290,7 +289,7 @@ public class ShotsLayout extends FrameLayout implements SwipeRefreshLayout.OnRef
       int height = (int) (width / ratio);
       placeHolder.setBounds(holder.itemView.getLeft(), holder.itemView.getTop(), holder.itemView.getLeft() + width, holder.itemView.getTop() + height);
 
-      picasso.load(shot.images.hidpi)
+      picasso.load(shot.images.normal)
           .tag(picassoTag)
           .placeholder(placeHolder)
           .resize(width, height)

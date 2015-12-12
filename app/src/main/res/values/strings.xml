@@ -20,8 +20,8 @@
   <string name="unexpected_error">An internal error occurred while attempting to execute a request.</string>
 
   <string-array name="home_pager_titles">
-    <!--<item>@string/hacker_news</item>-->
-    <!--<item>@string/product_hunt</item>-->
+    <item>@string/hacker_news</item>
+    <item>@string/product_hunt</item>
     <item>@string/dribbble</item>
   </string-array>
 </resources>

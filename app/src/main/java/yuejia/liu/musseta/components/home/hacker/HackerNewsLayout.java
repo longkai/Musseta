@@ -114,13 +114,15 @@ public class HackerNewsLayout extends FrameLayout implements SwipeRefreshLayout.
 
   private void bootstrap(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
     ((HomeActivity) context).getActivityComponent().inject(this);
+    populateLayout(context);
+
     linearLayoutManager = new LinearLayoutManager(context);
     hackerNewsAdapter = new HackerNewsAdapter();
     listDividerItemDecorator = new HackerNewsDivider(context);
   }
 
-  @Override protected void onFinishInflate() {
-    super.onFinishInflate();
+  private void populateLayout(Context context) {
+    inflate(context, R.layout.merge_home_pager_layout, this);
     ButterKnife.bind(this);
 
     picasso.load(R.mipmap.empty_list_4x)
@@ -265,6 +267,10 @@ public class HackerNewsLayout extends FrameLayout implements SwipeRefreshLayout.
   }
 
   @Override public Parcelable onSaveInstanceState() {
+    if (linearLayoutManager.getItemCount() == 0) {
+      return null;
+    }
+
     Parcelable parcelable = super.onSaveInstanceState();
     SavedState savedState = new SavedState(parcelable);
     savedState.lastPosition = linearLayoutManager.findFirstVisibleItemPosition();
