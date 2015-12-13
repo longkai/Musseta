@@ -23,7 +23,7 @@ public class SettingsActivity extends MussetaActivity<SettingsComponent> {
   @Bind(R.id.toolbar) Toolbar toolbar;
 
   @Override protected SettingsComponent setupActivityComponent() {
-    return Musseta.get(this).getMussetaComponent().plus();
+    return Musseta.get(this).getMussetaComponent().settingsComponent();
   }
 
   @Override protected void onCreate(Bundle savedInstanceState) {

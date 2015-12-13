@@ -6,6 +6,7 @@ import dagger.Component;
 import yuejia.liu.musseta.components.home.HomeComponent;
 import yuejia.liu.musseta.components.home.HomeModule;
 import yuejia.liu.musseta.components.settings.SettingsComponent;
+import yuejia.liu.musseta.components.splash.SplashComponent;
 
 /**
  * Application components, allow sub-component to attach.
@@ -18,7 +19,9 @@ import yuejia.liu.musseta.components.settings.SettingsComponent;
     MussetaModules.ApplicationModule.class
 })
 public interface MussetaComponent {
-  SettingsComponent plus();
+  SplashComponent splashComponent();
 
-  HomeComponent plus(HomeModule module);
+  SettingsComponent settingsComponent();
+
+  HomeComponent homeComponent(HomeModule module);
 }

@@ -44,7 +44,7 @@ public class SettingsActivityTest {
   @Before public void setUp() throws Exception {
     MussetaTestingRunner.get().addHooks((activity, bundle) -> {
       SettingsActivity settingsActivity = (SettingsActivity) activity;
-      SettingsTestingComponent testingComponent = MussetaTesting.get(activity).getMussetaTestingComponent().plus();
+      SettingsTestingComponent testingComponent = MussetaTesting.get(activity).getMussetaTestingComponent().settingsTestingComponent();
 
       testingComponent.injectTesting(this);
 

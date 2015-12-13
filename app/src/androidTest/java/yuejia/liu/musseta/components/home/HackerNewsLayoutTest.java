@@ -88,7 +88,7 @@ public class HackerNewsLayoutTest {
     MussetaTestingRunner.get().addHooks((activity, bundle) -> {
       HomeActivity homeActivity = (HomeActivity) activity;
       HomeTestingComponent homeTestingComponent = MussetaTesting.get(activity).getMussetaTestingComponent()
-          .plus(new HomeModule(homeActivity) {
+          .homeComponent(new HomeModule(homeActivity) {
             @Override protected HackerNewsApi providesHackerNewsApi(@HackerNews RestAdapter restAdapter) {
               return hackerNewsApi;
             }

@@ -48,7 +48,7 @@ public class HomeActivity extends MussetaActivity<HomeComponent> {
   @Inject Tracker tracker;
 
   @Override protected HomeComponent setupActivityComponent() {
-    return Musseta.get(this).getMussetaComponent().plus(new HomeModule(this));
+    return Musseta.get(this).getMussetaComponent().homeComponent(new HomeModule(this));
   }
 
   @Override protected void onCreate(Bundle savedInstanceState) {

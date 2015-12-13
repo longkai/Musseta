@@ -19,7 +19,7 @@ import yuejia.liu.musseta.components.settings.SettingsTestingComponent;
     MussetaModules.ApplicationModule.class
 })
 public interface MussetaTestingComponent extends MussetaComponent {
-  SettingsTestingComponent plus();
+  SettingsTestingComponent settingsTestingComponent();
 
-  HomeTestingComponent plus(HomeModule module);
+  HomeTestingComponent homeComponent(HomeModule module);
 }
