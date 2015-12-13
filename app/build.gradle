@@ -174,4 +174,8 @@ dependencies {
   androidTestCompile rootProject.ext.dependencies.espressoIntents
 
   androidTestApt rootProject.ext.dependencies.daggerCompiler
+
+  // debug
+  debugCompile rootProject.ext.dependencies.leakCanary
+  releaseCompile rootProject.ext.dependencies.leakCcanaryNoop
 }

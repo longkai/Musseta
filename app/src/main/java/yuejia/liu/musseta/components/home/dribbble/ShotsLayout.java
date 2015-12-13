@@ -76,7 +76,7 @@ public class ShotsLayout extends FrameLayout implements SwipeRefreshLayout.OnRef
   private ShotsAdapter      shotsAdapter;
   private ShotDecoration    shotDecoration;
 
-  private int        page;
+  private int page = 1; // api first page starts from 1
   private boolean    loading;
   private SavedState savedState;
 
@@ -198,16 +198,16 @@ public class ShotsLayout extends FrameLayout implements SwipeRefreshLayout.OnRef
       return;
     }
 
-    page = 0;
+    page = 1;
     requestShots();
   }
 
   @Override protected void onDetachedFromWindow() {
-    picasso.cancelTag(picassoTag);
+    super.onDetachedFromWindow();
     subscriptions.unsubscribe();
+    picasso.cancelTag(picassoTag);
     recyclerView.removeItemDecoration(shotDecoration);
     recyclerView.clearOnScrollListeners();
-    super.onDetachedFromWindow();
   }
 
   @Override public Parcelable onSaveInstanceState() {

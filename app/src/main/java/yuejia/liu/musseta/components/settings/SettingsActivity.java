@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,6 +31,17 @@ public class SettingsActivity extends MussetaActivity<SettingsComponent> {
     setContentView(R.layout.layout_settings);
     ButterKnife.bind(this);
     setSupportActionBar(toolbar);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case android.R.id.home:
+        finish();
+        return true;
+      default:
+      return super.onOptionsItemSelected(item);
+    }
   }
 
   public static class SettingsFragment extends PreferenceFragmentCompat {

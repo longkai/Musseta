@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.squareup.leakcanary.LeakCanary;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
@@ -21,6 +22,7 @@ public class Musseta extends Application {
 
     if (BuildConfig.DEBUG) {
       Timber.plant(new Timber.DebugTree());
+      LeakCanary.install(this);
     } else {
       Timber.plant(new Timber.Tree() {
         @Override protected void log(int priority, String tag, String message, Throwable t) {

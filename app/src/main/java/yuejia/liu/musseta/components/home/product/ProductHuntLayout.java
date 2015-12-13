@@ -253,10 +253,10 @@ public class ProductHuntLayout extends FrameLayout implements SwipeRefreshLayout
   }
 
   @Override protected void onDetachedFromWindow() {
-    picasso.cancelTag(picassoTag);
-    subscriptions.unsubscribe();
-    recyclerView.clearOnScrollListeners();
     super.onDetachedFromWindow();
+    subscriptions.unsubscribe();
+    picasso.cancelTag(picassoTag);
+    recyclerView.clearOnScrollListeners();
   }
 
   @Override public Parcelable onSaveInstanceState() {

@@ -191,10 +191,10 @@ public class HackerNewsLayout extends FrameLayout implements SwipeRefreshLayout.
   }
 
   @Override protected void onDetachedFromWindow() {
-    picasso.cancelTag(picassoTag);
-    subscriptions.unsubscribe();
-    recyclerView.removeItemDecoration(listDividerItemDecorator);
     super.onDetachedFromWindow();
+    subscriptions.unsubscribe();
+    picasso.cancelTag(picassoTag);
+    recyclerView.removeItemDecoration(listDividerItemDecorator);
   }
 
   private void performRequest() {

@@ -60,7 +60,7 @@
     <TextView
         android:id="@+id/comments_count"
         tools:text="25"
-        android:drawableLeft="@mipmap/ic_view_count_16dp"
+        android:drawableLeft="@mipmap/ic_comment_outline_16dp"
         android:layout_marginRight="12dp"
         style="@style/Dribbble.Shot"
         />

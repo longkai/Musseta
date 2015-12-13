@@ -21,6 +21,7 @@ public abstract class StatePagerAdapter extends PagerAdapter {
       Parcelable parcelable = lifecycle.onSaveInstanceState();
       states.put(key, parcelable);
     }
+    views.removeAtRange(0, views.size());
     return states;
   }
 
