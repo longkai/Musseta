@@ -112,7 +112,7 @@ public class ShotsLayout extends FrameLayout implements SwipeRefreshLayout.OnRef
   private void populateLayout(Context context) {
     inflate(context, R.layout.merge_home_pager_layout, this);
     ButterKnife.bind(this);
-    swipeRefreshLayout.setColorSchemeColors(R.color.dirbbble_accent);
+    swipeRefreshLayout.setColorSchemeColors(R.color.dribbble_accent);
     swipeRefreshLayout.setEnabled(false);
     swipeRefreshLayout.setOnRefreshListener(this);
     picasso.load(R.mipmap.empty_list_4x)

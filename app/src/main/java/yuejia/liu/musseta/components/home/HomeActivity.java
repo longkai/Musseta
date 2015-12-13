@@ -4,11 +4,11 @@ import javax.inject.Inject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,8 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.Bind;
+import butterknife.BindColor;
 import butterknife.ButterKnife;
 import com.google.android.gms.analytics.Tracker;
+import timber.log.Timber;
 import yuejia.liu.musseta.Musseta;
 import yuejia.liu.musseta.R;
 import yuejia.liu.musseta.components.home.dribbble.ShotsLayout;
@@ -38,6 +40,10 @@ public class HomeActivity extends MussetaActivity<HomeComponent> {
   @Bind(android.R.id.tabs) TabLayout         tabLayout;
   @Bind(R.id.view_pager)   ViewPager         viewPager;
 
+  @BindColor(R.color.hacker_news_accent)  int hackerNewsAccent;
+  @BindColor(R.color.product_hunt_accent) int productHuntAccent;
+  @BindColor(R.color.dribbble_accent)     int dribbbleAccent;
+
   @Inject Tracker tracker;
 
   @Override protected HomeComponent setupActivityComponent() {
@@ -49,6 +55,8 @@ public class HomeActivity extends MussetaActivity<HomeComponent> {
     setContentView(R.layout.layout_home);
     ButterKnife.bind(this);
     setSupportActionBar(toolbar);
+
+    viewPager.setPageTransformer(true, new HohoPagerTransfrom());
 
     viewPager.setAdapter(new HomePageAdapter(this));
     tabLayout.setupWithViewPager(viewPager);
@@ -70,6 +78,34 @@ public class HomeActivity extends MussetaActivity<HomeComponent> {
         return true;
       default:
         return super.onOptionsItemSelected(item);
+    }
+  }
+
+  private class HohoPagerTransfrom implements ViewPager.PageTransformer {
+    int r1 = Color.red(hackerNewsAccent);
+    int g1 = Color.green(hackerNewsAccent);
+    int b1 = Color.blue(hackerNewsAccent);
+
+    int r2 = Color.red(productHuntAccent);
+    int g2 = Color.green(productHuntAccent);
+    int b2 = Color.blue(productHuntAccent);
+
+    int r3 = Color.red(dribbbleAccent);
+    int g3 = Color.green(dribbbleAccent);
+    int b3 = Color.blue(dribbbleAccent);
+
+    @Override public void transformPage(View page, float position) {
+      // TODO: 12/13/15 if page size largen than 3, how should we do?
+      if (page instanceof ProductHuntLayout) {
+        Timber.d("position %f", position);
+        float ratio1 = Math.abs(position);
+        float ratio2 = 1 - ratio1;
+        if (position < 0 && position >= -1) { // 1 - 2
+          appBarLayout.setBackgroundColor(Color.rgb((int) (r3 * ratio1 + r2 * ratio2), (int) (g3 * ratio1 + g2 * ratio2), (int) (b3 * ratio1 + b2 * ratio2)));
+        } else if (position > 0 && position <= 1) {  // 0 - 1
+          appBarLayout.setBackgroundColor(Color.rgb((int) (r1 * ratio1 + r2 * ratio2), (int) (g1 * ratio1 + g2 * ratio2), (int) (b1 * ratio1 + b2 * ratio2)));
+        }
+      }
     }
   }
 
