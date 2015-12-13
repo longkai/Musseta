@@ -10,4 +10,7 @@ import yuejia.liu.musseta.components.ActivityScope;
 @ActivityScope
 @Subcomponent
 public interface SplashComponent extends ActivityComponent<SplashActivity> {
+  int splash_millis = 2000;
+  int animation_millis = 1500;
+  int slogan_millis = 300;
 }
