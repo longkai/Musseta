@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <dimen name="tiny">2dp</dimen>
+  <dimen name="small">4dp</dimen>
+  <dimen name="medium">8dp</dimen>
+  <dimen name="large">16dp</dimen>
+  <dimen name="xlarge">32dp</dimen>
+
   <dimen name="hacker_news_horizontal_padding">16dp</dimen>
   <dimen name="hacker_news_vertical_padding">10dp</dimen>
 

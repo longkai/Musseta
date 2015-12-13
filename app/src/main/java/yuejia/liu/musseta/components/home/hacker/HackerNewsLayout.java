@@ -71,7 +71,7 @@ public class HackerNewsLayout extends FrameLayout implements SwipeRefreshLayout.
   @Bind(R.id.refresh_layout)   SwipeRefreshLayout   swipeRefreshLayout;
   @Bind(R.id.recycler_view)    EnhancedRecyclerView recyclerView;
 
-  @BindColor(R.color.material_amber_500) int refreshColor;
+  @BindColor(R.color.hacker_news_accent) int refreshColor;
 
   @Inject Picasso            picasso;
   @Inject HackerNewsApi      hackerNewsApi;

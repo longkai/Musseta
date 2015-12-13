@@ -122,7 +122,7 @@ public class ProductHuntLayout extends FrameLayout implements SwipeRefreshLayout
     inflate(context, R.layout.merge_home_pager_layout, this);
     ButterKnife.bind(this);
 
-    picasso.load(R.mipmap.empty_list_4x)
+    picasso.load(R.mipmap.empty_fall_4x)
         .tag(picassoTag)
         .resize(getResources().getDisplayMetrics().widthPixels, 0)
         .into(emptyView);

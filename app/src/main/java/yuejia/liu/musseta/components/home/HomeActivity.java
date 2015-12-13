@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -56,7 +57,8 @@ public class HomeActivity extends MussetaActivity<HomeComponent> {
     ButterKnife.bind(this);
     setSupportActionBar(toolbar);
 
-    viewPager.setPageTransformer(true, new HohoPagerTransfrom());
+    viewPager.setPageTransformer(true, new HohoPageTransformer());
+    viewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.medium));
 
     viewPager.setAdapter(new HomePageAdapter(this));
     tabLayout.setupWithViewPager(viewPager);
@@ -81,29 +83,36 @@ public class HomeActivity extends MussetaActivity<HomeComponent> {
     }
   }
 
-  private class HohoPagerTransfrom implements ViewPager.PageTransformer {
-    int r1 = Color.red(hackerNewsAccent);
-    int g1 = Color.green(hackerNewsAccent);
-    int b1 = Color.blue(hackerNewsAccent);
+  private class HohoPageTransformer implements ViewPager.PageTransformer {
+    final int r1 = Color.red(hackerNewsAccent);
+    final int g1 = Color.green(hackerNewsAccent);
+    final int b1 = Color.blue(hackerNewsAccent);
 
-    int r2 = Color.red(productHuntAccent);
-    int g2 = Color.green(productHuntAccent);
-    int b2 = Color.blue(productHuntAccent);
+    final int r2 = Color.red(productHuntAccent);
+    final int g2 = Color.green(productHuntAccent);
+    final int b2 = Color.blue(productHuntAccent);
 
-    int r3 = Color.red(dribbbleAccent);
-    int g3 = Color.green(dribbbleAccent);
-    int b3 = Color.blue(dribbbleAccent);
+    final int r3 = Color.red(dribbbleAccent);
+    final int g3 = Color.green(dribbbleAccent);
+    final int b3 = Color.blue(dribbbleAccent);
 
     @Override public void transformPage(View page, float position) {
-      // TODO: 12/13/15 if page size largen than 3, how should we do?
+      // TODO: 12/13/15 if page size larger than 3, how should we do?
       if (page instanceof ProductHuntLayout) {
         Timber.d("position %f", position);
         float ratio1 = Math.abs(position);
         float ratio2 = 1 - ratio1;
+        int rgb = -1;
         if (position < 0 && position >= -1) { // 1 - 2
-          appBarLayout.setBackgroundColor(Color.rgb((int) (r3 * ratio1 + r2 * ratio2), (int) (g3 * ratio1 + g2 * ratio2), (int) (b3 * ratio1 + b2 * ratio2)));
+          rgb = Color.rgb((int) (r3 * ratio1 + r2 * ratio2), (int) (g3 * ratio1 + g2 * ratio2), (int) (b3 * ratio1 + b2 * ratio2));
         } else if (position > 0 && position <= 1) {  // 0 - 1
-          appBarLayout.setBackgroundColor(Color.rgb((int) (r1 * ratio1 + r2 * ratio2), (int) (g1 * ratio1 + g2 * ratio2), (int) (b1 * ratio1 + b2 * ratio2)));
+          rgb = Color.rgb((int) (r1 * ratio1 + r2 * ratio2), (int) (g1 * ratio1 + g2 * ratio2), (int) (b1 * ratio1 + b2 * ratio2));
+        }
+        if (rgb != -1) {
+          appBarLayout.setBackgroundColor(rgb);
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(rgb);
+          }
         }
       }
     }

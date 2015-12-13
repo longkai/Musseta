@@ -115,7 +115,7 @@ public class ShotsLayout extends FrameLayout implements SwipeRefreshLayout.OnRef
     swipeRefreshLayout.setColorSchemeColors(R.color.dribbble_accent);
     swipeRefreshLayout.setEnabled(false);
     swipeRefreshLayout.setOnRefreshListener(this);
-    picasso.load(R.mipmap.empty_list_4x)
+    picasso.load(R.mipmap.empty_grid_4x)
         .tag(picassoTag)
         .resize(getResources().getDisplayMetrics().widthPixels, 0)
         .into(emptyView);
