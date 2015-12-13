@@ -18,6 +18,7 @@ import yuejia.liu.musseta.components.home.hacker.HackerNews;
 import yuejia.liu.musseta.components.home.hacker.HackerNewsApi;
 import yuejia.liu.musseta.components.home.product.ProductHunt;
 import yuejia.liu.musseta.components.home.product.ProductHuntApi;
+import yuejia.liu.musseta.ui.ResourceManager;
 
 /**
  * The Home module.
@@ -28,6 +29,10 @@ public class HomeModule {
 
   public HomeModule(HomeActivity homeActivity) {
     this.homeActivity = homeActivity;
+  }
+
+  @Provides @ActivityScope protected ResourceManager providesResourceManager() {
+    return new ResourceManager(homeActivity);
   }
 
   @Provides @ActivityScope @HackerNews

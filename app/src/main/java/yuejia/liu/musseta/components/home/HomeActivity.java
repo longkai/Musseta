@@ -5,7 +5,6 @@ import javax.inject.Inject;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -29,6 +28,7 @@ import yuejia.liu.musseta.components.home.hacker.HackerNewsLayout;
 import yuejia.liu.musseta.components.home.product.ProductHuntLayout;
 import yuejia.liu.musseta.components.settings.SettingsActivity;
 import yuejia.liu.musseta.ui.MussetaActivity;
+import yuejia.liu.musseta.ui.ResourceManager;
 import yuejia.liu.musseta.ui.StatePagerAdapter;
 
 /**
@@ -45,7 +45,8 @@ public class HomeActivity extends MussetaActivity<HomeComponent> {
   @BindColor(R.color.product_hunt_accent) int productHuntAccent;
   @BindColor(R.color.dribbble_accent)     int dribbbleAccent;
 
-  @Inject Tracker tracker;
+  @Inject Tracker         tracker;
+  @Inject ResourceManager resourceManager;
 
   @Override protected HomeComponent setupActivityComponent() {
     return Musseta.get(this).getMussetaComponent().homeComponent(new HomeModule(this));
@@ -96,6 +97,12 @@ public class HomeActivity extends MussetaActivity<HomeComponent> {
     final int g3 = Color.green(dribbbleAccent);
     final int b3 = Color.blue(dribbbleAccent);
 
+    public HohoPageTransformer() {
+      // init the first page if any...
+      appBarLayout.setBackgroundColor(hackerNewsAccent);
+      resourceManager.setStatusBarColor(hackerNewsAccent);
+    }
+
     @Override public void transformPage(View page, float position) {
       // TODO: 12/13/15 if page size larger than 3, how should we do?
       if (page instanceof ProductHuntLayout) {
@@ -110,9 +117,7 @@ public class HomeActivity extends MussetaActivity<HomeComponent> {
         }
         if (rgb != -1) {
           appBarLayout.setBackgroundColor(rgb);
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(rgb);
-          }
+          resourceManager.setStatusBarColor(rgb);
         }
       }
     }

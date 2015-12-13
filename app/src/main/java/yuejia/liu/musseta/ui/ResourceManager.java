@@ -2,6 +2,7 @@ package yuejia.liu.musseta.ui;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.AnyRes;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorRes;
@@ -29,6 +30,12 @@ public class ResourceManager {
   @AnyRes public int getResourceId(@AttrRes int attr) {
     activity.getTheme().resolveAttribute(attr, typedValue, true);
     return typedValue.resourceId;
+  }
+
+  public void setStatusBarColor(int color) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      activity.getWindow().setStatusBarColor(color);
+    }
   }
 
   public void setSupportActionbar(Toolbar toolbar, @ColorRes int backIconColor) {
