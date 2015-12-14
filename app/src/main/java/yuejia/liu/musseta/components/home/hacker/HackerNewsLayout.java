@@ -267,7 +267,8 @@ public class HackerNewsLayout extends FrameLayout implements SwipeRefreshLayout.
   }
 
   @Override public Parcelable onSaveInstanceState() {
-    if (linearLayoutManager.getItemCount() == 0) {
+    // if not fulfill one page requests, stop save instance
+    if (linearLayoutManager.getItemCount() < PER_PAGE) {
       return null;
     }
 

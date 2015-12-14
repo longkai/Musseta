@@ -54,7 +54,7 @@ public class HomeActivity extends MussetaActivity<HomeComponent> {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.layout_home);
+    setContentView(R.layout.activity_home);
     ButterKnife.bind(this);
     setSupportActionBar(toolbar);
 

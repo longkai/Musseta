@@ -14,7 +14,8 @@
   </style>
 
   <style name="Musseta.Splash">
-    <item name="colorPrimaryDark">@android:color/white</item>
+    <item name="colorPrimaryDark">@android:color/background_light</item>
+    <item name="android:colorBackground">@android:color/background_light</item>
   </style>
 
   <style name="AppBar" parent="Platform.AppCompat">
