@@ -29,7 +29,7 @@ public class ListDividerItemDecorator extends RecyclerView.ItemDecoration {
     final int count = parent.getChildCount();
     for (int i = 0; i < count; i++) {
       View view = parent.getChildAt(i);
-      divider.setBounds(parent.getLeft(), view.getBottom(), parent.getRight(), view.getBottom() + height);
+      divider.setBounds(view.getLeft(), view.getBottom(), view.getRight(), view.getBottom() + height);
       divider.draw(c);
     }
   }

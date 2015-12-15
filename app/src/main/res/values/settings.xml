@@ -5,5 +5,7 @@
   <bool name="settings_def_enable_tracking">true</bool>
   <string name="settings_key_enable_tracking">settings_enable_tracking</string>
   <string name="settings_title_enable_tracking">Anonymous Tracking</string>
-  <string name="settings_summary_enable_tracking">Enable to help author make it better. The author respects your privacy and never collects that has nothing to do with the app.</string>
+  <string name="settings_summary_enable_tracking">Enable to help the author make it better. The author respects your privacy and never collects those has nothing to do with the app.</string>
+
+  <string name="settings_title_open_source">Open Source License</string>
 </resources>
