@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -40,7 +38,6 @@ public class WebActivity extends MussetaActivity<WebComponent> {
   @Bind(R.id.app_bar)          AppBarLayout       appBarLayout;
   @Bind(R.id.toolbar)          Toolbar            toolbar;
   @Bind(android.R.id.progress) ProgressBar        progressBar;
-  @Bind(R.id.refresh_layout)   SwipeRefreshLayout swipeRefreshLayout;
   @Bind(R.id.web_view)         WebView            webView;
 
   private ResourceManager resourceManager;
@@ -78,11 +75,6 @@ public class WebActivity extends MussetaActivity<WebComponent> {
 
     delegate.onCreate(this, webView);
 
-    int resourceId = new ResourceManager(this).getResourceId(R.attr.colorAccent);
-    swipeRefreshLayout.setNestedScrollingEnabled(true);
-    swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, resourceId));
-    swipeRefreshLayout.setOnRefreshListener(() -> webView.reload());
-
     webView.getSettings().setJavaScriptEnabled(true);
     webView.setWebViewClient(new WebViewClient() {
       @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -102,7 +94,6 @@ public class WebActivity extends MussetaActivity<WebComponent> {
         super.onProgressChanged(view, newProgress);
         progressBar.setProgress(newProgress);
         if (newProgress == 100) {
-          swipeRefreshLayout.setRefreshing(false);
           progressBar.setVisibility(View.GONE);
         } else {
           progressBar.setVisibility(View.VISIBLE);

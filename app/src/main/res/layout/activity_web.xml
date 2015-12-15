@@ -27,14 +27,8 @@
         android:layout_height="2dp" />
   </android.support.design.widget.AppBarLayout>
 
-  <android.support.v4.widget.SwipeRefreshLayout
-      android:id="@+id/refresh_layout"
+  <WebView
+      android:id="@+id/web_view"
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-      <WebView
-          android:id="@+id/web_view"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent" />
-  </android.support.v4.widget.SwipeRefreshLayout>
+      android:layout_height="match_parent" />
 </android.support.v7.widget.LinearLayoutCompat>
