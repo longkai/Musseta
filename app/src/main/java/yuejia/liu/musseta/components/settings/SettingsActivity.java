@@ -2,16 +2,17 @@ package yuejia.liu.musseta.components.settings;
 
 import javax.inject.Inject;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,8 +52,22 @@ public class SettingsActivity extends MussetaActivity<SettingsComponent> {
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
   }
 
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
+    MenuItem os = menu.add(Menu.NONE, android.R.id.button1, Menu.NONE, "Open Source");
+    os.setIcon(R.drawable.ic_code_white_24dp);
+    MenuItemCompat.setShowAsAction(os, MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+    return true;
+  }
+
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
+      case android.R.id.button1:
+        WebActivity.startActivity(this, SimpleWebViewDelegate
+            .newBuilder()
+            .usePageTitle(true)
+            .url("https://github.com/longkai/Musseta")
+            .build());
+        return true;
       case android.R.id.home:
         finish();
         return true;
