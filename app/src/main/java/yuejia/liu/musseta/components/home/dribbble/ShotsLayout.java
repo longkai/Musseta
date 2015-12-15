@@ -45,6 +45,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import yuejia.liu.musseta.R;
 import yuejia.liu.musseta.components.home.HomeActivity;
+import yuejia.liu.musseta.components.web.WebActivity;
 import yuejia.liu.musseta.misc.ErrorMetaRetriever;
 import yuejia.liu.musseta.misc.NetworkWatcher;
 import yuejia.liu.musseta.misc.RoundedTransformation;
@@ -236,7 +237,7 @@ public class ShotsLayout extends FrameLayout implements SwipeRefreshLayout.OnRef
 
     public SavedState(Parcel source) {
       super(source);
-      shots = source.readArrayList(null);
+      shots = source.readArrayList(Shot.class.getClassLoader());
       page = source.readInt();
       lastFirstPosition = source.readInt();
     }
@@ -346,7 +347,7 @@ public class ShotsLayout extends FrameLayout implements SwipeRefreshLayout.OnRef
           .setValue(1)
           .build());
       Shot shot = (Shot) view.getTag();
-      activity.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(shot.html_url)));
+      WebActivity.startActivity(activity, new DribbleWebViewDelegate(shot));
     }
 
     public ShotViewHolder(View itemView) {

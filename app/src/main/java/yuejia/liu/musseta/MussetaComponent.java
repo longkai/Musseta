@@ -7,6 +7,7 @@ import yuejia.liu.musseta.components.home.HomeComponent;
 import yuejia.liu.musseta.components.home.HomeModule;
 import yuejia.liu.musseta.components.settings.SettingsComponent;
 import yuejia.liu.musseta.components.splash.SplashComponent;
+import yuejia.liu.musseta.components.web.WebComponent;
 
 /**
  * Application components, allow sub-component to attach.
@@ -22,6 +23,8 @@ public interface MussetaComponent {
   SplashComponent splashComponent();
 
   SettingsComponent settingsComponent();
+
+  WebComponent webComponent();
 
   HomeComponent homeComponent(HomeModule module);
 }

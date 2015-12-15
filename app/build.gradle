@@ -136,7 +136,7 @@ configurations {
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
 
-  compile rootProject.ext.dependencies.palette
+  compile rootProject.ext.dependencies.colors
 
   compile rootProject.ext.dependencies.rxandroid
   compile rootProject.ext.dependencies.rxjava

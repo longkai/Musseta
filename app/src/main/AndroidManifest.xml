@@ -32,6 +32,8 @@
         android:label="@string/settings"
         android:name=".components.settings.SettingsActivity" />
 
+    <activity android:name=".components.web.WebActivity" />
+
     <meta-data
         android:name="channel"
         android:value="${channel}" />

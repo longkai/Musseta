@@ -71,8 +71,8 @@ public class Post implements Parcelable {
     this.discussion_url = in.readString();
     this.featured = in.readByte() != 0;
     this.maker_inside = in.readByte() != 0;
-    this.makers = new ArrayList<User>();
-    in.readList(this.makers, List.class.getClassLoader());
+    this.makers = new ArrayList<>();
+    in.readList(this.makers, User.class.getClassLoader());
     this.platforms = in.createTypedArrayList(Platform.CREATOR);
     this.redirect_url = in.readString();
     this.screenshot_url = in.readParcelable(Screenshot_url.class.getClassLoader());

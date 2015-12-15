@@ -21,4 +21,8 @@
   <style name="AppBar" parent="Platform.AppCompat">
     <item name="colorControlNormal">@android:color/white</item>
   </style>
+
+  <style name="Musseta.WebProgressBar">
+    <item name="colorAccent">@android:color/white</item>
+  </style>
 </resources>

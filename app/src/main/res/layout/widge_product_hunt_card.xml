@@ -23,7 +23,7 @@
       android:layout_height="wrap_content">
 
     <ImageView
-        tools:src="@mipmap/ic_chat_bubble_outline_black_24dp"
+        tools:src="@mipmap/ic_like_outline_16dp"
         android:id="@+id/image"
         app:layout_columnSpan="2"
         android:adjustViewBounds="true" />

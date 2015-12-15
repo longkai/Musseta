@@ -56,6 +56,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import yuejia.liu.musseta.R;
 import yuejia.liu.musseta.components.home.HomeActivity;
+import yuejia.liu.musseta.components.web.WebActivity;
 import yuejia.liu.musseta.misc.ErrorMetaRetriever;
 import yuejia.liu.musseta.misc.MathHelper;
 import yuejia.liu.musseta.misc.NetworkWatcher;
@@ -398,7 +399,7 @@ public class ProductHuntLayout extends FrameLayout implements SwipeRefreshLayout
           .setLabel("Item")
           .setValue(1)
           .build());
-      view.getContext().startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(post.discussion_url)));
+      WebActivity.startActivity(activity, new ProductWebViewDelegate(post));
     }
 
     public PostCardViewHolder(View itemView) {

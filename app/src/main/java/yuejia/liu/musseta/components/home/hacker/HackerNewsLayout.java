@@ -8,7 +8,6 @@ import javax.inject.Inject;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
@@ -54,6 +53,8 @@ import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 import yuejia.liu.musseta.R;
 import yuejia.liu.musseta.components.home.HomeActivity;
+import yuejia.liu.musseta.components.web.SimpleWebViewDelegate;
+import yuejia.liu.musseta.components.web.WebActivity;
 import yuejia.liu.musseta.misc.ErrorMetaRetriever;
 import yuejia.liu.musseta.misc.NetworkWatcher;
 import yuejia.liu.musseta.ui.ViewInstanceStateLifecycle;
@@ -376,7 +377,7 @@ public class HackerNewsLayout extends FrameLayout implements SwipeRefreshLayout.
       HomeActivity activity = (HomeActivity) view.getContext();
       switch (view.getId()) {
         case R.id.root_view:
-          activity.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(item.url)));
+          WebActivity.startActivity(activity, new HackerNewsWebDelegate(item));
 
           activity.getTracker().send(new HitBuilders.EventBuilder()
               .setCategory(activity.getString(R.string.hacker_news))
@@ -386,7 +387,11 @@ public class HackerNewsLayout extends FrameLayout implements SwipeRefreshLayout.
               .build());
           break;
         case R.id.reply_counting:
-          activity.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://news.ycombinator.com/item?id=" + item.id)));
+          WebActivity.startActivity(activity, SimpleWebViewDelegate.newBuilder()
+              .title("Comments")
+              .subtitle(item.title)
+              .url(activity.getString(R.string.hacker_news_comments_url, item.id))
+              .build());
 
           activity.getTracker().send(new HitBuilders.EventBuilder()
               .setCategory(activity.getString(R.string.hacker_news))
