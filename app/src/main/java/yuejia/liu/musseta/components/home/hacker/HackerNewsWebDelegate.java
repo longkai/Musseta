@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.os.ParcelableCompat;
 import android.support.v4.os.ParcelableCompatCreatorCallbacks;
 import android.support.v4.util.Pair;
+import android.support.v4.view.MenuItemCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
@@ -50,7 +51,9 @@ public class HackerNewsWebDelegate implements WebViewDelegate {
   }
 
   @Override public void onCreateOptionsMenu(WebActivity activity, Menu menu) {
-    menu.add(Menu.NONE, android.R.id.button1, Menu.NONE, activity.getString(R.string.comments_count, item.descendants));
+    MenuItem comments = menu.add(Menu.NONE, android.R.id.button1, Menu.NONE, activity.getString(R.string.comments_count, item.descendants));
+    comments.setIcon(new CommentsOutline(activity, item.descendants));
+    MenuItemCompat.setShowAsAction(comments, MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
   }
 
   @Override public boolean onOptionsItemSelected(WebActivity activity, MenuItem item) {
