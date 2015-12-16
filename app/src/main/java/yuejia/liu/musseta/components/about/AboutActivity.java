@@ -3,13 +3,8 @@ package yuejia.liu.musseta.components.about;
 import javax.inject.Inject;
 
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Shader;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.Space;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
@@ -17,10 +12,11 @@ import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,6 +25,8 @@ import com.squareup.picasso.RequestCreator;
 import yuejia.liu.musseta.BuildConfig;
 import yuejia.liu.musseta.Musseta;
 import yuejia.liu.musseta.R;
+import yuejia.liu.musseta.components.web.SimpleWebViewDelegate;
+import yuejia.liu.musseta.components.web.WebActivity;
 import yuejia.liu.musseta.ui.MussetaActivity;
 
 /**
@@ -111,5 +109,13 @@ public class AboutActivity extends MussetaActivity<AboutComponent> {
       default:
         return super.onOptionsItemSelected(item);
     }
+  }
+
+  public void develop(View view) {
+    WebActivity.startActivity(this, SimpleWebViewDelegate.newBuilder().usePageTitle(true).url("http://longist.me").build());
+  }
+
+  public void graphics(View view) {
+    Toast.makeText(this, ":)", Toast.LENGTH_SHORT).show();
   }
 }
