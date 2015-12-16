@@ -1,3 +1,20 @@
+// NOTE: you need provide you own signing configs in `gradle.properties`
+def enableSigning = file("${rootDir}/gradle.properties").exists()
+// NOTE: if you want to enable fabric facilities, please provide your own `fabric.properties` file, plz refer fabric doc
+def enableFabric = file("${projectDir}/fabric.properties").exists()
+def enableGoogleService = file("${projectDir}/google-services.json").exists()
+def isCi = "true".equals(System.getenv("CI"))
+def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
+
+// since sometimes, we needs to publish the alpha/beta testing version, but google play required same package name with
+// the release one. At this time, we has no intent to add GA tracking in this build.
+// So, we need to pass a command line args when building.
+// For example: gradlew clean assembleRelease -Pbeta
+// The default option is enable if you provides the google-services.json config file.
+if (hasProperty("alpha") || hasProperty("beta")) {
+  enableGoogleService = false
+}
+
 buildscript {
   repositories {
     maven { url rootProject.ext.repositories.fabric }
@@ -14,18 +31,14 @@ apply plugin: rootProject.ext.plugins.android
 apply plugin: rootProject.ext.plugins.retrolambda
 apply plugin: rootProject.ext.plugins.apt
 apply plugin: rootProject.ext.plugins.fabric
-apply plugin: rootProject.ext.plugins.googleServices
+
+if (enableGoogleService) {
+  apply plugin: rootProject.ext.plugins.googleServices
+}
 
 repositories {
   maven { url rootProject.ext.repositories.fabric }
 }
-
-// NOTE: you need provide you own signing configs in `gradle.properties`
-def enableSigning = file("${rootDir}/gradle.properties").exists()
-// NOTE: if you want to enable fabric facilities, please provide your own `fabric.properties` file, plz refer fabric doc
-def enableFabric = file("${projectDir}/fabric.properties").exists()
-def isCi = "true".equals(System.getenv("CI"))
-def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
 android {
   compileSdkVersion rootProject.ext.versions.compileSdk
@@ -41,7 +54,7 @@ android {
     applicationId "yuejia.liu.musseta"
     minSdkVersion 9
     targetSdkVersion rootProject.ext.versions.targetSdk
-    versionCode 1
+    versionCode 2
     versionName "0.5.0"
 
     archivesBaseName = "musset-$versionName-$versionCode"
