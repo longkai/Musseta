@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-  <string name="app_name">Musseta</string>
+  <string name="app_name">Musset</string>
   <string name="slogan">A place to explore and learn.</string>
   <string name="settings">Settings</string>
   <string name="share">Share</string>
