@@ -7,7 +7,7 @@
       android:id="@+id/share"
       android:title="@string/share"
       android:icon="@drawable/ic_share_white_24dp"
-      app:showAsAction="ifRoom" />
+      app:showAsAction="never" />
 
   <item
       android:id="@+id/refresh"
