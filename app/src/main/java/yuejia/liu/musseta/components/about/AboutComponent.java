@@ -1,7 +1,13 @@
 package yuejia.liu.musseta.components.about;
 
+import dagger.Subcomponent;
+import yuejia.liu.musseta.components.ActivityComponent;
+import yuejia.liu.musseta.components.ActivityScope;
+
 /**
- * Created by longkai on 12/15/15.
+ * About component.
  */
-public class AboutComponent {
+@ActivityScope
+@Subcomponent
+public interface AboutComponent extends ActivityComponent<AboutActivity> {
 }

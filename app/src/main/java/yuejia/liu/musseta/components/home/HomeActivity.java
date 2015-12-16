@@ -23,6 +23,7 @@ import com.google.android.gms.analytics.Tracker;
 import timber.log.Timber;
 import yuejia.liu.musseta.Musseta;
 import yuejia.liu.musseta.R;
+import yuejia.liu.musseta.components.about.AboutActivity;
 import yuejia.liu.musseta.components.home.dribbble.ShotsLayout;
 import yuejia.liu.musseta.components.home.hacker.HackerNewsLayout;
 import yuejia.liu.musseta.components.home.product.ProductHuntLayout;
@@ -78,6 +79,9 @@ public class HomeActivity extends MussetaActivity<HomeComponent> {
     switch (item.getItemId()) {
       case R.id.action_settings:
         startActivity(new Intent(this, SettingsActivity.class));
+        return true;
+      case R.id.action_about:
+        startActivity(new Intent(this, AboutActivity.class));
         return true;
       default:
         return super.onOptionsItemSelected(item);

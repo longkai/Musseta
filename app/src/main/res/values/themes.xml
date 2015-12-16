@@ -25,4 +25,6 @@
   <style name="Musseta.WebProgressBar">
     <item name="colorAccent">@android:color/white</item>
   </style>
+
+  <style name="Musseta.About" />
 </resources>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+  <ImageView
+      android:id="@android:id/background"
+      tools:src="@mipmap/background_about"
+      android:scaleType="fitXY"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+
+  <android.support.v7.widget.LinearLayoutCompat
+      android:id="@+id/app_bar"
+      android:orientation="vertical"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+    <android.support.v4.widget.Space
+        android:id="@+id/place_holder"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:theme="@style/AppBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize" />
+  </android.support.v7.widget.LinearLayoutCompat>
+
+  <android.support.v7.widget.LinearLayoutCompat
+      android:layout_gravity="center"
+      android:orientation="vertical"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/app_name"
+        android:text="@string/app_name"
+        android:textSize="36sp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@android:color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="@string/slogan"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginTop="68dp"
+        android:text="Code"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:typeface="monospace"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:text="xiaolongtongxue"
+        android:alpha="0.66"
+        android:textSize="11sp"
+        android:typeface="monospace"
+        android:textColor="@android:color/white"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginTop="15dp"
+        android:text="Graphics"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:typeface="monospace"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:text="Lu Peng"
+        android:alpha="0.66"
+        android:textSize="11sp"
+        android:typeface="monospace"
+        android:textColor="@android:color/white"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+  </android.support.v7.widget.LinearLayoutCompat>
+</FrameLayout>

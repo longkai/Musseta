@@ -3,6 +3,7 @@ package yuejia.liu.musseta;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import yuejia.liu.musseta.components.about.AboutComponent;
 import yuejia.liu.musseta.components.home.HomeComponent;
 import yuejia.liu.musseta.components.home.HomeModule;
 import yuejia.liu.musseta.components.settings.SettingsComponent;
@@ -23,6 +24,8 @@ public interface MussetaComponent {
   SplashComponent splashComponent();
 
   SettingsComponent settingsComponent();
+
+  AboutComponent aboutComponent();
 
   WebComponent webComponent();
 

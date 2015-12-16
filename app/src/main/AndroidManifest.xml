@@ -32,6 +32,11 @@
         android:label="@string/settings"
         android:name=".components.settings.SettingsActivity" />
 
+    <activity
+        android:label="@string/about"
+        android:theme="@style/Musseta.About"
+        android:name=".components.about.AboutActivity" />
+
     <activity android:name=".components.web.WebActivity" />
 
     <meta-data
