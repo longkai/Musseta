@@ -67,7 +67,7 @@ public class SplashView extends View {
 
     rect = new Rect();
     paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 17, getResources().getDisplayMetrics());
+    textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, getResources().getDisplayMetrics());
     spacing = getResources().getDimensionPixelSize(R.dimen.medium);
     paint.setTextSize(textSize);
     textColor = Color.parseColor("#999999");
@@ -103,6 +103,8 @@ public class SplashView extends View {
   @Override protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
     canvas.save();
+
+    canvas.translate(0f, -(spacing + textHeight) / 2);
 
     int x = (getWidth() - frameWidth) >> 1;
     int y = (getHeight() - animatorHeight) >> 1;
