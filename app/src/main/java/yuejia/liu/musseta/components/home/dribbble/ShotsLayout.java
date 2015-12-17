@@ -237,7 +237,7 @@ public class ShotsLayout extends FrameLayout implements SwipeRefreshLayout.OnRef
 
     public SavedState(Parcel source) {
       super(source);
-      shots = source.readArrayList(Shot.class.getClassLoader());
+      shots = source.createTypedArrayList(Shot.CREATOR);
       page = source.readInt();
       lastFirstPosition = source.readInt();
     }
@@ -248,7 +248,7 @@ public class ShotsLayout extends FrameLayout implements SwipeRefreshLayout.OnRef
 
     @Override public void writeToParcel(Parcel out, int flags) {
       super.writeToParcel(out, flags);
-      out.writeList(shots);
+      out.writeTypedList(shots);
       out.writeInt(page);
       out.writeInt(lastFirstPosition);
     }

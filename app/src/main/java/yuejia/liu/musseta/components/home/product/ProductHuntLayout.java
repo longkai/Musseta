@@ -179,7 +179,7 @@ public class ProductHuntLayout extends FrameLayout implements SwipeRefreshLayout
     loading = true;
 
     // if it' s the first loading or its retry
-    if (postsAdapter.getItemCount() == 0) {
+    if (postsAdapter.getItemCount() == 0 && !swipeRefreshLayout.isRefreshing()) {
       progressBar.setVisibility(VISIBLE);
     }
 
@@ -297,7 +297,7 @@ public class ProductHuntLayout extends FrameLayout implements SwipeRefreshLayout
       super(source);
       days_ago = source.readInt();
       lastFirstPosition = source.readInt();
-      source.readArray(null);
+      posts = source.createTypedArrayList(Post.CREATOR);
     }
 
     public SavedState(Parcelable superState) {
@@ -308,7 +308,7 @@ public class ProductHuntLayout extends FrameLayout implements SwipeRefreshLayout
       super.writeToParcel(out, flags);
       out.writeInt(days_ago);
       out.writeInt(lastFirstPosition);
-      out.writeList(posts);
+      out.writeTypedList(posts);
     }
 
     public static final Creator<SavedState> CREATOR = ParcelableCompat.newCreator(new ParcelableCompatCreatorCallbacks<SavedState>() {

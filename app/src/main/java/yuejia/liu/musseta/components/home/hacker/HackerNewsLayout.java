@@ -297,8 +297,8 @@ public class HackerNewsLayout extends FrameLayout implements SwipeRefreshLayout.
       super(source);
       lastPosition = source.readInt();
       count = source.readInt();
-      topStories = source.readArrayList(null);
-      items = source.readArrayList(null);
+      topStories = source.readArrayList(Long.class.getClassLoader());
+      items = source.createTypedArrayList(Item.CREATOR);
     }
 
     public SavedState(Parcelable superState) {
@@ -310,7 +310,7 @@ public class HackerNewsLayout extends FrameLayout implements SwipeRefreshLayout.
       out.writeInt(lastPosition);
       out.writeInt(count);
       out.writeList(topStories);
-      out.writeList(items);
+      out.writeTypedList(items);
     }
 
     public static final Creator<SavedState> CREATOR = ParcelableCompat.newCreator(new ParcelableCompatCreatorCallbacks<SavedState>() {
