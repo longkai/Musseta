@@ -15,17 +15,18 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.View;
 
 /**
  * The Resource manager for {@link yuejia.liu.musseta.components.ActivityScope}
  */
 @UiThread
-public class ResourceManager {
+public class UIToolkit {
   final Activity activity;
 
   final TypedValue typedValue;
 
-  public ResourceManager(Activity activity) {
+  public UIToolkit(Activity activity) {
     this.activity = activity;
     typedValue = new TypedValue();
   }
@@ -55,6 +56,14 @@ public class ResourceManager {
       Drawable icon = toolbar.getNavigationIcon();
       icon = DrawableCompat.wrap(icon);
       DrawableCompat.setTint(icon, ContextCompat.getColor(a, backIconColor));
+    }
+  }
+
+  public static void setBackground(View view, Drawable background) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+      view.setBackground(background);
+    } else {
+      view.setBackgroundDrawable(background);
     }
   }
 }

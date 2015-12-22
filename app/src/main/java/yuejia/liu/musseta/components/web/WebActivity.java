@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 import yuejia.liu.musseta.Musseta;
 import yuejia.liu.musseta.R;
 import yuejia.liu.musseta.ui.MussetaActivity;
-import yuejia.liu.musseta.ui.ResourceManager;
+import yuejia.liu.musseta.ui.UIToolkit;
 
 /**
  * The global nested web activity.
@@ -40,7 +40,7 @@ public class WebActivity extends MussetaActivity<WebComponent> {
   @Bind(android.R.id.progress) ProgressBar        progressBar;
   @Bind(R.id.web_view)         WebView            webView;
 
-  private ResourceManager resourceManager;
+  private UIToolkit       uiToolkit;
   private WebViewDelegate delegate;
 
   private Runnable delaySoundPlayer = () -> toolbar.playSoundEffect(SoundEffectConstants.CLICK);
@@ -61,7 +61,7 @@ public class WebActivity extends MussetaActivity<WebComponent> {
       throw new IllegalArgumentException("Where is your web delegate?");
     }
     delegate = getIntent().getParcelableExtra(WebComponent.param_web_delegate);
-    resourceManager = new ResourceManager(this);
+    uiToolkit = new UIToolkit(this);
 
     setContentView(R.layout.activity_web);
     ButterKnife.bind(this);
@@ -171,7 +171,7 @@ public class WebActivity extends MussetaActivity<WebComponent> {
     toolbar.removeCallbacks(delaySoundPlayer);
   }
 
-  public ResourceManager getResourceManager() {
-    return resourceManager;
+  public UIToolkit getUiToolkit() {
+    return uiToolkit;
   }
 }

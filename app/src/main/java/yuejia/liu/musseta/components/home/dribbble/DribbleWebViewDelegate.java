@@ -49,8 +49,8 @@ public class DribbleWebViewDelegate implements WebViewDelegate {
   @Override public void onCreate(WebActivity activity, WebView webView) {
     int color = ContextCompat.getColor(activity, R.color.dribbble_accent);
     activity.getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
-    activity.getResourceManager().setStatusBarColor(color);
-    activity.getResourceManager().setTaskDescription(null, null, color);
+    activity.getUiToolkit().setStatusBarColor(color);
+    activity.getUiToolkit().setTaskDescription(null, null, color);
   }
 
   @Override public void onCreateOptionsMenu(WebActivity activity, Menu menu) {

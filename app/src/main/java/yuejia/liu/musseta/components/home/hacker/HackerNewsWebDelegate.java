@@ -46,8 +46,8 @@ public class HackerNewsWebDelegate implements WebViewDelegate {
   @Override public void onCreate(WebActivity activity, WebView webView) {
     int accent = ContextCompat.getColor(activity, R.color.hacker_news_accent);
     activity.getSupportActionBar().setBackgroundDrawable(new ColorDrawable(accent));
-    activity.getResourceManager().setStatusBarColor(accent);
-    activity.getResourceManager().setTaskDescription(null, null, accent);
+    activity.getUiToolkit().setStatusBarColor(accent);
+    activity.getUiToolkit().setTaskDescription(null, null, accent);
   }
 
   @Override public void onCreateOptionsMenu(WebActivity activity, Menu menu) {

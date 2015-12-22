@@ -29,7 +29,7 @@ import yuejia.liu.musseta.components.home.hacker.HackerNewsLayout;
 import yuejia.liu.musseta.components.home.product.ProductHuntLayout;
 import yuejia.liu.musseta.components.settings.SettingsActivity;
 import yuejia.liu.musseta.ui.MussetaActivity;
-import yuejia.liu.musseta.ui.ResourceManager;
+import yuejia.liu.musseta.ui.UIToolkit;
 import yuejia.liu.musseta.ui.StatePagerAdapter;
 
 /**
@@ -46,8 +46,8 @@ public class HomeActivity extends MussetaActivity<HomeComponent> {
   @BindColor(R.color.product_hunt_accent) int productHuntAccent;
   @BindColor(R.color.dribbble_accent)     int dribbbleAccent;
 
-  @Inject Tracker         tracker;
-  @Inject ResourceManager resourceManager;
+  @Inject Tracker   tracker;
+  @Inject UIToolkit uiToolkit;
 
   @Override protected HomeComponent setupActivityComponent() {
     return Musseta.get(this).getMussetaComponent().homeComponent(new HomeModule(this));
@@ -104,7 +104,7 @@ public class HomeActivity extends MussetaActivity<HomeComponent> {
     public HohoPageTransformer() {
       // init the first page if any...
       appBarLayout.setBackgroundColor(hackerNewsAccent);
-      resourceManager.setStatusBarColor(hackerNewsAccent);
+      uiToolkit.setStatusBarColor(hackerNewsAccent);
     }
 
     @Override public void transformPage(View page, float position) {
@@ -121,7 +121,7 @@ public class HomeActivity extends MussetaActivity<HomeComponent> {
         }
         if (rgb != -1) {
           appBarLayout.setBackgroundColor(rgb);
-          resourceManager.setStatusBarColor(rgb);
+          uiToolkit.setStatusBarColor(rgb);
         }
       }
     }

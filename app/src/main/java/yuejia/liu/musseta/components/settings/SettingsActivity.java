@@ -26,7 +26,7 @@ import yuejia.liu.musseta.R;
 import yuejia.liu.musseta.components.web.SimpleWebViewDelegate;
 import yuejia.liu.musseta.components.web.WebActivity;
 import yuejia.liu.musseta.ui.MussetaActivity;
-import yuejia.liu.musseta.ui.ResourceManager;
+import yuejia.liu.musseta.ui.UIToolkit;
 import yuejia.liu.musseta.widgets.ListDividerItemDecorator;
 
 /**
@@ -37,7 +37,7 @@ public class SettingsActivity extends MussetaActivity<SettingsComponent> {
 
   @Bind(R.id.toolbar) Toolbar toolbar;
 
-  private ResourceManager resourceManager;
+  private UIToolkit uiToolkit;
 
   @Override protected SettingsComponent setupActivityComponent() {
     return Musseta.get(this).getMussetaComponent().settingsComponent();
@@ -45,7 +45,7 @@ public class SettingsActivity extends MussetaActivity<SettingsComponent> {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    resourceManager = new ResourceManager(this);
+    uiToolkit = new UIToolkit(this);
     setContentView(R.layout.activity_settings);
     ButterKnife.bind(this);
     setSupportActionBar(toolbar);
@@ -178,7 +178,7 @@ public class SettingsActivity extends MussetaActivity<SettingsComponent> {
         View view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.two_line_list_item, parent, false);
         int dimen = view.getResources().getDimensionPixelSize(R.dimen.medium);
         view.setPadding(dimen, dimen, dimen, dimen);
-        view.setBackgroundResource(activity.resourceManager.getResourceId(R.attr.selectableItemBackground));
+        view.setBackgroundResource(activity.uiToolkit.getResourceId(R.attr.selectableItemBackground));
         return new OpenSourceViewHolder(view);
       }
 
