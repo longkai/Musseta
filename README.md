@@ -9,12 +9,12 @@ Musseta
 
 The app focus on architect and testing.
 
-Currently, it simply fetches the top stories form **Hacker News** with its official API. It' s under heavily development and more features is on the way :)
+Currently, it simply fetches the top stories form **Hacker News**, everyday tech posts from **Product Hunt** and popular shots from **Dribbble**  with their official API. It' s under heavily development and more features is on the way :)
 
 It may be changed at anytime with any nice idea :punch:
 
 ### Screenshot
-![Screenshot](art/screenshot.jpg)
+![Screenshot](art/screenshot.gif)
 
 ### Note
 For some reason(especially the emulator), the [travis-ci][CI-url] might build failed. However, each commit has been passed locally.
@@ -29,7 +29,7 @@ Many thanks to the community and some of my friends who support the project. It 
 ```
 The MIT License (MIT)
 
-Copyright (c) 2015 longkai, HeisenbergLab
+Copyright (c) 2015 - Present longkai, HeisenbergLab
 
 The software shall be used for good, not evil.
 ```
